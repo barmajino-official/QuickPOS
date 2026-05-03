@@ -18,27 +18,56 @@ A modern, high-performance Point of Sale and Enterprise Management System built 
 
 ## Getting Started
 
-### Local Development
+### 1. Docker Setup
 
-1. Navigate to the `app` directory:
-   ```bash
-   cd app
-   ```
-2. Install dependencies:
-   ```bash
-   bun install
-   ```
-3. Run the development server:
-   ```bash
-   bun run dev
-   ```
-
-### Docker Setup
-
-To run the entire stack using Docker:
+First, initialize the development environment using Docker:
 ```bash
 docker compose up -d
 ```
+
+### 2. Enter the Container
+
+To run development commands, you need to attach to the running container:
+```bash
+docker exec -it uni-app /bin/sh
+```
+
+### 3. Run Development Commands
+
+Inside the container, navigate to the `/app` directory and run the following as needed:
+
+- **Install dependencies**:
+  ```bash
+  bun install
+  ```
+- **Watch CSS changes**:
+  ```bash
+  bun run css:watch
+  ```
+- **Start development server**:
+  ```bash
+  bun run dev
+  ```
+- **Build for production**:
+  ```bash
+  bun run build
+  ```
+- **Start production server**:
+  ```bash
+  bun run start
+  ```
+
+## Supabase Configuration
+
+### Important: Setup Required
+You **must** configure your Supabase credentials before the application will function.
+
+1. Open `app/src/lib/supabase.ts`.
+2. Update the `supabaseUrl` and `supabaseAnonKey` with your actual project values.
+
+### Self-Hosted Supabase
+This project is designed to work with a self-hosted Supabase instance. If you haven't set up your backend yet, follow the official guide:
+[Supabase Self-Hosting Guide (Docker)](https://supabase.com/docs/guides/self-hosting/docker)
 
 ## License
 
