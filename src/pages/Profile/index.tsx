@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useNavigate } from "react";
 import { supabase } from "../../lib/supabase";
 
 export function Profile() {
   const [email, setEmail] = useState("");
   const [createdAt, setCreatedAt] = useState("");
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const init = async () => {
@@ -13,6 +14,7 @@ export function Profile() {
         console.error(error || "No active session user");
         await supabase.auth.signOut();
         setLoading(false);
+        navigate("/login");
         return;
       }
       setEmail(data.session.user.email || "");
