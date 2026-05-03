@@ -217,7 +217,6 @@ const allNavItems = [
 ];
 
 export function App() {
-  console.log("App: Rendering...");
   const [session, setSession] = useState<any>(null);
   const [permissions, setPermissions] = useState<Permissions | null>(null);
   const [loading, setLoading] = useState(true);
@@ -315,13 +314,16 @@ export function App() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, s) => {
-      console.log("App: Auth event:", event);
-      setSession(s);
-      if (s?.user) {
-        await loadPermissions(s.user.id);
-      } else {
-        setPermissions(null);
-        lastUserRef.current = null;
+      // Only update if session ID changed or session went from null to active (or vice versa)
+      if (s?.access_token !== session?.access_token) {
+        console.log("App: Auth event:", event);
+        setSession(s);
+        if (s?.user) {
+          await loadPermissions(s.user.id);
+        } else {
+          setPermissions(null);
+          lastUserRef.current = null;
+        }
       }
     });
 
