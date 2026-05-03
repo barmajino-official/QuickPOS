@@ -1,0 +1,12 @@
+services:
+  app:
+    image: oven/bun:latest
+    container_name: uni-app
+    network_mode: host
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    tty: true
+    command: tail -f /dev/null
+    environment:
+      - NODE_ENV=development

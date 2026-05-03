@@ -1,0 +1,42 @@
+Midterm Project: Company Management Dashboard (React Front-End)
+Project Overview
+This project requires students to build a company management dashboard using React. The system will simulate a real-world company administration platform managing employees, departments, attendance, and projects.
+Main Modules
+    • Login Page: User login with validation and role selection.
+    • Dashboard: Display summary cards such as total employees, departments, projects, and attendance.
+    • Employees Page: Add, edit, delete, and display employees.
+    • Departments Page: Manage departments and assign employees.
+    • Attendance Page: Mark attendance and display status.
+    • Projects Page: Create and manage projects with assigned employees.
+    • Profile Page: Display user information.
+Required Features
+    • Use React Router (multiple pages)
+    • Use useState for dynamic data
+    • Use useEffect at least once
+    • Use controlled forms with validation
+    • Use map() to display lists
+    • Use conditional rendering
+    • Create reusable components (Header, Sidebar, Footer)
+    • Maintain a consistent layout
+Technical Requirements
+- At least 8 components
+- Proper use of props
+- Form handling with validation
+Anti-Cheating Requirements
+    • Each student must use a unique theme variation (e.g., Hospital, School, Gym, etc.)
+    • Each student must add one custom field or feature
+    • Students must explain their code during presentation
+    • Students must perform a live modification in front of the instructor
+    • Projects that cannot be explained will lose marks
+Live Evaluation Tasks
+During presentation, students may be asked to:
+- Add a new input field
+- Modify validation rules
+- Add filtering logic
+- Explain useState and useEffect usage
+Evaluation Criteria
+UI and Layout: 20%
+Functionality: 25%
+React Concepts: 25%
+Data Relationships: 10%
+Presentation and Live Modification: 20%
