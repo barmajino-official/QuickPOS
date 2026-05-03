@@ -6,7 +6,7 @@ import {
   useLocation,
   Navigate,
 } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "./lib/supabase";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Permissions } from "./lib/types";
@@ -217,9 +217,13 @@ const allNavItems = [
 ];
 
 export function App() {
+  console.log("App: Rendering...");
   const [session, setSession] = useState<any>(null);
   const [permissions, setPermissions] = useState<Permissions | null>(null);
   const [loading, setLoading] = useState(true);
+  const [permissionsLoading, setPermissionsLoading] = useState(false);
+  const initialized = useRef(false);
+  const lastUserRef = useRef<string | null>(null);
   const [theme, setTheme] = useState(
     () => localStorage.getItem("pos-theme") || "light",
   );
@@ -228,10 +232,10 @@ export function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   // Removed interval to prevent full-app re-renders every second
-  // useEffect(() => {
-  //   const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-  //   return () => clearInterval(timer);
-  // }, []);
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -239,7 +243,13 @@ export function App() {
   }, [theme]);
 
   const loadPermissions = async (userId: string) => {
-    await new Promise((r) => setTimeout(r, 300));
+    if (lastUserRef.current === userId && permissions) return;
+    if (permissionsLoading) return;
+    
+    try {
+      lastUserRef.current = userId;
+      console.log("Fetching permissions for user:", userId);
+      setPermissionsLoading(true);
     const { data: staffData, error } = await supabase
       .from("staff")
       .select("permissions, role")
@@ -279,15 +289,23 @@ export function App() {
         staff: false,
       });
     }
+    } finally {
+      setPermissionsLoading(false);
+    }
   };
 
   useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+
     async function init() {
+      console.log("App: Running init...");
       const {
         data: { session: currentSession },
       } = await supabase.auth.getSession();
-      setSession(currentSession);
+      
       if (currentSession?.user) {
+        setSession(currentSession);
         await loadPermissions(currentSession.user.id);
       }
       setLoading(false);
@@ -296,12 +314,14 @@ export function App() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, s) => {
+    } = supabase.auth.onAuthStateChange(async (event, s) => {
+      console.log("App: Auth event:", event);
       setSession(s);
       if (s?.user) {
         await loadPermissions(s.user.id);
       } else {
         setPermissions(null);
+        lastUserRef.current = null;
       }
     });
 
@@ -310,10 +330,13 @@ export function App() {
 
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
-  if (loading)
+  if (loading || (session && !permissions && permissionsLoading))
     return (
-      <div className="min-h-screen flex items-center justify-center bg-base-200">
-        <span className="loading loading-spinner text-primary"></span>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-base-200">
+        <span className="loading loading-spinner loading-lg text-primary mb-4"></span>
+        <p className="text-sm font-mono opacity-50 animate-pulse">
+          {loading ? "Initializing App..." : "Syncing Permissions..."}
+        </p>
       </div>
     );
 
