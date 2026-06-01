@@ -1,0 +1,23 @@
+@reference "../../../../app.css";
+
+/**
+ * @file NavItem.css
+ * @description Styles for the Sidebar NavItem — icon + label pill.
+ */
+
+.nav_item {
+  @apply flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-[var(--color-base-content)] rounded-full;
+  transition: background-color 0.2s var(--m3-standard), color 0.2s var(--m3-standard);
+}
+
+.nav_item:hover:not(.m3-nav-pill-active) {
+  background-color: color-mix(in srgb, var(--color-base-300) 35%, transparent);
+}
+
+.nav_item_icon {
+  @apply flex items-center justify-center flex-shrink-0;
+}
+
+.nav_item_label {
+  @apply truncate;
+}

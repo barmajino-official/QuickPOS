@@ -1,0 +1,75 @@
+name: pos_iul
+
+services:
+  # =========================================================================
+  # Database — PostgreSQL 15 (unchanged)
+  # =========================================================================
+  db:
+    image: postgres:15-alpine
+    container_name: pos-iul-db
+    ports:
+      - "9001:5432"
+    environment:
+      - POSTGRES_USER=pos_iul_user
+      - POSTGRES_PASSWORD=pos_iul_password
+      - POSTGRES_DB=pos_iul_db
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    networks:
+      - pos_iul_network
+    restart: unless-stopped
+
+  # =========================================================================
+  # Backend — .NET 10 API
+  #
+  # New since the e-commerce expansion:
+  #   • ./uploads bind-mount        — persists uploaded shop/ID images
+  #   • Database__Reset             — set to "true" ONCE after pulling new models,
+  #                                   then back to "false". Drops & recreates schema.
+  # =========================================================================
+  backend:
+    build: ./backend
+    image: pos-iul-backend:latest
+    container_name: pos-iul-backend
+    ports:
+      - "9002:8080"
+    volumes:
+      - ./backend:/app          # hot-reload via `dotnet watch`
+      - ./uploads:/app/uploads  # persist uploaded images outside the container
+    networks:
+      - pos_iul_network
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=pos_iul_db;Username=pos_iul_user;Password=pos_iul_password
+      # Set to "true" once after adding the new e-commerce models,
+      # restart the backend, confirm seed ran, then flip back to "false".
+      - Database__Reset=false
+      - Uploads__Path=/app/uploads
+      - Uploads__MaxBytes=10485760
+      - Gemini__ApiKey=${GEMINI_API_KEY}
+      # SECURITY: required X-Dev-Auth-Token header for /auth/test-token
+      # (still only allowed when ASPNETCORE_ENVIRONMENT=Development).
+      - JwtSettings__DevAuthToken=dev-only-token-change-me
+    depends_on:
+      - db
+
+  # =========================================================================
+  # Frontend — Vite + React + DaisyUI (now TypeScript)
+  # =========================================================================
+  frontend:
+    build: ./frontend
+    image: pos-iul-frontend:latest
+    container_name: pos-iul-frontend
+    ports:
+      - "9003:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - pos_iul_network
+    depends_on:
+      - backend
+
+networks:
+  pos_iul_network:
+    driver: bridge

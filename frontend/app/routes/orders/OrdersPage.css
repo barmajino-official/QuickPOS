@@ -1,0 +1,231 @@
+@reference "../../app.css";
+
+/**
+ * @file OrdersPage.css
+ * @description Styles for the orders page — full-width table card with M3 tokens.
+ *              Uses raw CSS animation since animate-fade-up is a custom class.
+ */
+
+/* ── Page layout ───────────────────────────────────────────────── */
+
+.orders_page {
+  @apply p-6 md:p-8 w-full;
+  animation: fadeUp 0.5s var(--m3-emphasized) both;
+}
+
+/* ── Card container ────────────────────────────────────────────── */
+
+.orders_card {
+  @apply bg-[var(--color-base-100)] rounded-[24px] shadow-sm overflow-hidden w-full;
+}
+
+.orders_scroll {
+  @apply overflow-x-auto;
+}
+
+/* ── Table ─────────────────────────────────────────────────────── */
+
+.orders_table {
+  @apply w-full;
+}
+
+.orders_thead {
+  @apply bg-[var(--color-base-200)]/50 text-[var(--color-neutral)];
+}
+
+.orders_th {
+  @apply px-6 py-4 font-medium tracking-wide uppercase text-xs;
+}
+
+.orders_th_right {
+  @apply px-6 py-4 font-medium tracking-wide uppercase text-xs text-right;
+}
+
+.orders_row {
+  @apply border-b border-[var(--color-base-300)] last:border-0;
+  transition: background-color 0.15s var(--m3-standard);
+}
+
+.orders_row:hover {
+  background-color: color-mix(in srgb, var(--color-base-200) 30%, transparent);
+}
+
+.orders_td {
+  @apply px-6 py-4 text-sm;
+}
+
+.orders_td_invoice {
+  @apply px-6 py-4 font-mono text-sm font-medium text-[var(--color-primary)];
+}
+
+.orders_td_staff {
+  @apply px-6 py-4 text-sm text-[var(--color-neutral)];
+}
+
+.orders_td_total {
+  @apply px-6 py-4 text-right font-medium;
+}
+
+.orders_td_date {
+  @apply px-6 py-4 text-xs text-[var(--color-neutral)];
+}
+
+.orders_td_actions {
+  @apply px-6 py-4 text-right;
+}
+
+/* ── Status badges ─────────────────────────────────────────────── */
+
+.orders_badge_completed {
+  @apply font-medium;
+}
+
+.orders_badge_pending {
+  @apply font-medium;
+}
+
+/* ── Action buttons ────────────────────────────────────────────── */
+
+.orders_actions_group {
+  @apply flex justify-end gap-2;
+}
+
+.orders_btn_receipt {
+  @apply text-[var(--color-info)];
+}
+
+.orders_btn_delete {
+  @apply text-[var(--color-error)];
+}
+
+/* ── Empty + loading states ────────────────────────────────────── */
+
+.orders_loading {
+  @apply flex items-center justify-center h-64;
+}
+
+.orders_spinner {
+  @apply text-[var(--color-primary)];
+}
+
+.orders_empty {
+  @apply p-10 text-center text-[var(--color-neutral)];
+}
+
+.orders_empty_text {
+  @apply text-lg;
+}
+
+/* ── Receipt modal ─────────────────────────────────────────────── */
+
+.receipt_overlay {
+  /* classes moved to JSX classList */
+}
+
+.receipt_card {
+  @apply bg-[var(--color-base-100)] rounded-[24px] max-w-md shadow-lg border border-[var(--color-base-300)] p-0 overflow-hidden;
+}
+
+.receipt_header {
+  @apply bg-[var(--color-base-200)]/50 px-8 py-6 text-center border-b border-[var(--color-base-300)];
+}
+
+.receipt_title {
+  @apply text-xl font-bold;
+}
+
+.receipt_subtitle {
+  @apply text-xs text-[var(--color-neutral)] mt-1;
+}
+
+.receipt_body {
+  @apply px-8 py-6 space-y-4;
+}
+
+.receipt_meta_row {
+  @apply flex justify-between text-sm;
+}
+
+.receipt_meta_label {
+  @apply text-[var(--color-neutral)];
+}
+
+.receipt_meta_value {
+  @apply font-mono font-medium;
+}
+
+.receipt_divider {
+  @apply my-2;
+}
+
+/* ── Receipt line-items table ──────────────────────────────────── */
+
+.receipt_table {
+  @apply w-full;
+}
+
+.receipt_thead {
+  @apply text-[var(--color-neutral)] text-xs uppercase;
+}
+
+.receipt_item_th {
+  @apply pl-0;
+}
+
+.receipt_qty_th {
+  @apply text-center;
+}
+
+.receipt_total_th {
+  @apply text-right pr-0;
+}
+
+.receipt_item_row {
+  @apply border-0;
+}
+
+.receipt_item_name {
+  @apply font-medium text-sm;
+}
+
+.receipt_item_price {
+  @apply text-xs text-[var(--color-neutral)];
+}
+
+.receipt_item_cell {
+  @apply pl-0 py-2;
+}
+
+.receipt_qty_cell {
+  @apply text-center py-2 text-sm;
+}
+
+.receipt_total_cell {
+  @apply text-right pr-0 py-2 font-medium text-sm;
+}
+
+/* ── Receipt footer ────────────────────────────────────────────── */
+
+.receipt_grand_total {
+  @apply flex justify-between text-lg font-bold;
+}
+
+.receipt_grand_total_value {
+  @apply text-[var(--color-primary)];
+}
+
+.receipt_actions {
+  @apply px-8 pb-6 flex gap-3;
+}
+
+.receipt_btn_close {
+  @apply flex-1 rounded-full;
+}
+
+.receipt_btn_print {
+  @apply flex-1 rounded-full;
+}
+
+.receipt_backdrop {
+  @apply bg-black/20;
+}

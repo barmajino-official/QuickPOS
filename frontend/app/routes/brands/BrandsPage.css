@@ -1,0 +1,162 @@
+@reference "../../app.css";
+
+/**
+ * @file BrandsPage.css
+ * @description Styles for the brands management page — full-width table + modal.
+ */
+
+.brands_page {
+  @apply p-4 sm:p-6 lg:p-8 w-full;
+  animation: fadeUp 0.5s var(--m3-emphasized) both;
+}
+
+.brands_card {
+  @apply bg-[var(--color-base-100)] rounded-[24px] shadow-sm border border-[var(--color-base-300)] w-full overflow-hidden;
+}
+
+.brands_scroll {
+  @apply overflow-x-auto;
+}
+
+.brands_thead {
+  @apply bg-[var(--color-base-200)]/50 text-[var(--color-neutral)];
+}
+
+.brands_th {
+  @apply px-6 py-4 font-medium tracking-wide uppercase text-xs;
+}
+
+.brands_th_actions {
+  @apply px-6 py-4 font-medium tracking-wide uppercase text-xs text-right;
+}
+
+.brands_row {
+  @apply border-b border-[var(--color-base-300)] last:border-0;
+  transition: background-color 0.15s var(--m3-standard);
+}
+
+.brands_row:hover {
+  background-color: color-mix(in srgb, var(--color-base-200) 30%, transparent);
+}
+
+.brands_td {
+  @apply px-6 py-4 text-sm text-[var(--color-neutral)];
+}
+
+.brands_td_name {
+  @apply px-6 py-4;
+}
+
+.brands_name_link {
+  @apply font-medium text-[var(--color-base-content)];
+}
+
+.brands_name_link:hover {
+  @apply text-[var(--color-primary)] underline;
+}
+
+.brands_ext_link {
+  @apply text-[var(--color-primary)] hover:underline;
+}
+
+.brands_td_actions {
+  @apply px-6 py-4 text-right;
+}
+
+.brands_actions_group {
+  @apply flex justify-end gap-1;
+}
+
+.brands_loading {
+  @apply flex items-center justify-center h-64;
+}
+
+.brands_empty {
+  @apply p-10 text-center text-[var(--color-neutral)];
+}
+
+.brands_empty_text {
+  @apply text-lg;
+}
+
+/* ── Modal ─────────────────────────────────────────────────────── */
+
+.brands_modal_box {
+  @apply bg-[var(--color-base-100)] rounded-[28px] max-w-md shadow-lg border border-[var(--color-base-300)] p-8;
+}
+
+.brands_modal_title {
+  @apply font-bold text-2xl mb-6 text-[var(--color-base-content)];
+}
+
+.brands_form {
+  @apply space-y-4;
+}
+
+.brands_form_row {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-4;
+}
+
+.brands_form_group {
+  @apply flex flex-col gap-1.5;
+}
+
+.brands_form_label {
+  @apply text-sm font-medium text-[var(--color-base-content)] px-1;
+}
+
+.brands_form_input:focus {
+  @apply outline-none border-[var(--color-primary)];
+}
+
+.brands_modal_actions {
+  @apply mt-8 pt-4 border-t border-[var(--color-base-300)];
+}
+
+/* ── Image Upload & Thumbnails ───────────────────────── */
+
+.brands_td_image {
+  @apply px-6 py-3 w-16;
+}
+
+.brands_thumb {
+  @apply w-11 h-11 rounded-xl object-cover border border-[var(--color-base-300)];
+}
+
+.brands_thumb_placeholder {
+  @apply w-11 h-11 rounded-xl bg-[var(--color-base-200)] flex items-center justify-center text-lg;
+}
+
+.brands_image_field {
+  @apply flex items-center gap-4 mb-4;
+}
+
+.brands_image_preview {
+  @apply w-20 h-20 rounded-2xl bg-[var(--color-base-200)] border border-[var(--color-base-300)] flex items-center justify-center overflow-hidden flex-shrink-0;
+}
+
+.brands_image_preview_img {
+  @apply w-full h-full object-cover;
+}
+
+.brands_image_placeholder {
+  @apply text-3xl;
+}
+
+.brands_image_upload {
+  @apply cursor-pointer;
+}
+
+.brands_image_input {
+  @apply hidden;
+}
+
+.brands_image_upload_btn {
+  @apply inline-flex items-center px-5 py-2 rounded-full border border-[var(--color-base-300)] text-sm font-medium text-[var(--color-base-content)];
+  transition: background-color 0.2s var(--m3-standard);
+}
+
+.brands_image_upload_btn:hover {
+  background-color: color-mix(in srgb, var(--color-base-300) 35%, transparent);
+}
+

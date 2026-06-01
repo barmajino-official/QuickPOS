@@ -1,0 +1,237 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* =================================================================
+   Material Design 3 (M3) — "Google/Montajat" tonal theme
+   -----------------------------------------------------------------
+   Updated to reflect Google's modern UI: pill-shaped buttons, 
+   large card border-radii (24px), soft tonal active states, 
+   and distinct surface-container backgrounds.
+   ================================================================= */
+
+@plugin "daisyui/theme" {
+  name: "montajat";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  /* Surfaces */
+  --color-base-100: #ffffff; /* Pure white for cards/modals */
+  --color-base-200: #f4f7fc; /* M3 "Surface Container Low" (Gmail/Drive background) */
+  --color-base-300: #e1e3e1; /* M3 "Surface Variant" (Borders, dividers) */
+  --color-base-content: #1f1f1f; /* M3 "On Surface" */
+
+  /* Primary (Actions, Checkboxes, Main Buttons) */
+  --color-primary: #0b57d0; /* M3 Google Blue */
+  --color-primary-content: #ffffff;
+
+  /* Secondary / Primary Container (Active Nav states, Soft Highlights) */
+  --color-secondary: #d3e3fd; /* Soft light blue used for active sidebar items */
+  --color-secondary-content: #041e49; /* Dark contrast text for secondary container */
+
+  /* Accent / Tertiary */
+  --color-accent: #146c2e; /* M3 Green */
+  --color-accent-content: #ffffff;
+
+  /* Neutral */
+  --color-neutral: #444746;
+  --color-neutral-content: #ffffff;
+
+  /* Semantic */
+  --color-info: #0b57d0;
+  --color-success: #146c2e;
+  --color-warning: #b3261e; /* M3 Error/Warning is usually this darker red */
+  --color-error: #b3261e;
+
+  /* Radii - The M3 Signature */
+  --radius-selector: 9999px; /* Pill shapes for active states/tabs */
+  --radius-btn: 9999px;      /* Pill shape for all buttons (like "Sign up", "Manage") */
+  --radius-field: 8px;       /* Slightly rounded inputs */
+  --radius-box: 24px;        /* Large rounded corners for cards (Google One, Ad Center) */
+  
+  --border: 1px;
+}
+
+@plugin "daisyui/theme" {
+  name: "montajat-dark";
+  prefersdark: true;
+  color-scheme: dark;
+
+  /* Surfaces */
+  --color-base-100: #1e1f20; /* M3 Dark Surface */
+  --color-base-200: #131314; /* M3 Dark App Background */
+  --color-base-300: #444746; /* M3 Dark Borders */
+  --color-base-content: #e3e3e3;
+
+  /* Primary */
+  --color-primary: #a8c7fa; /* M3 Primary Light Blue */
+  --color-primary-content: #062e6f;
+
+  /* Secondary / Primary Container */
+  --color-secondary: #004a77; /* Deep blue for active states */
+  --color-secondary-content: #c2e7ff;
+
+  /* Accent */
+  --color-accent: #81c995;
+  --color-accent-content: #00391c;
+
+  /* Neutral */
+  --color-neutral: #c4c7c5;
+  --color-neutral-content: #1e1f20;
+
+  --color-info: #a8c7fa;
+  --color-success: #81c995;
+  --color-warning: #f2b8b5;
+  --color-error: #f2b8b5;
+
+  --radius-selector: 9999px;
+  --radius-btn: 9999px;
+  --radius-field: 8px;
+  --radius-box: 24px;
+
+  --border: 1px;
+}
+
+/* =================================================================
+   Typography & Base Setup
+   ================================================================= */
+@layer base {
+  html, body {
+    overflow-x: clip;
+    /* App background uses base-200 (light gray-blue), cards use base-100 (white) */
+    background-color: var(--color-base-200); 
+    color: var(--color-base-content);
+  }
+  html {
+    /* Adjusted to feel closer to Google Sans geometry */
+    font-family: "Roboto Flex", "Roboto", system-ui, -apple-system, sans-serif;
+    font-feature-settings: "ss01", "ss02";
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-display {
+    font-family: "Roboto Flex", "Roboto", system-ui, sans-serif;
+    font-variation-settings: "wdth" 110, "GRAD" 50;
+  }
+  #root {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  button, [role="button"], a, label, summary, select {
+    cursor: pointer;
+  }
+}
+
+/* =================================================================
+   Material 3 Elevations (Shadows)
+   M3 relies heavily on very soft, diffuse shadows. 
+   ================================================================= */
+@layer utilities {
+  .m3-elevation-1 {
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  }
+  .m3-elevation-2 {
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+  }
+  .m3-elevation-3 {
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Active Nav Pill Utility - Use this for your sidebar items */
+  .m3-nav-pill-active {
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-content);
+    border-radius: 9999px;
+    font-weight: 600;
+  }
+}
+
+/* =================================================================
+   Motion & Animation
+   ================================================================= */
+:root {
+  --m3-emphasized: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --m3-standard: cubic-bezier(0.2, 0, 0, 1);
+  --m3-decelerate: cubic-bezier(0, 0, 0, 1);
+}
+
+.m3-ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: currentColor;
+  opacity: 0.12; /* Lowered opacity for a softer M3 feel */
+  transform: scale(0);
+  animation: m3-ripple-anim 0.55s var(--m3-decelerate) forwards;
+}
+@keyframes m3-ripple-anim {
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fadeUp 0.5s var(--m3-emphasized) both; }
+
+@keyframes m3-progress-slide {
+  0%   { transform: translateX(-100%); }
+  60%  { transform: translateX(150%); }
+  100% { transform: translateX(150%); }
+}
+.m3-progress-stripe {
+  width: 40%;
+  animation: m3-progress-slide 1.4s var(--m3-standard) infinite;
+}
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+.animate-page-enter { animation: pageEnter 0.28s var(--m3-standard) both; }
+
+/* Interactive Hover States */
+.m3-interactive {
+  transition:
+    background-color 0.25s var(--m3-standard),
+    transform 0.35s var(--m3-emphasized),
+    box-shadow 0.25s var(--m3-standard),
+    border-color 0.25s var(--m3-standard);
+}
+/* Cards lift up slightly and get a stronger shadow on hover */
+.m3-interactive:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);
+}
+.m3-interactive:active { transform: translateY(0) scale(0.98); }
+
+/* Buttons */
+.btn {
+  transition: background-color 0.2s var(--m3-standard),
+              color 0.2s var(--m3-standard),
+              transform 0.18s var(--m3-emphasized),
+              box-shadow 0.2s var(--m3-standard);
+  /* Ensure all buttons default to the pill shape */
+  border-radius: var(--radius-btn);
+}
+.btn:active { transform: scale(0.96); }
+
+/* Typography Helpers */
+.display-lg {
+  font-family: "Roboto Flex", "Roboto", sans-serif;
+  font-weight: 400; /* M3 large display fonts are usually regular, not bold */
+  font-variation-settings: "wdth" 110, "GRAD" 0, "opsz" 144;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+.display-md {
+  font-family: "Roboto Flex", "Roboto", sans-serif;
+  font-weight: 400;
+  font-variation-settings: "wdth" 110, "GRAD" 0, "opsz" 96;
+  letter-spacing: 0;
+  line-height: 1.15;
+}

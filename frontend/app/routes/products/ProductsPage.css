@@ -1,0 +1,233 @@
+@reference "../../app.css";
+
+/**
+ * @file ProductsPage.css
+ * @description Styles for the Products CRUD page.
+ *              M3 design tokens, full-width table layout, and modal styling.
+ */
+
+/* --- Page Layout --- */
+
+.products_page {
+  @apply p-4 sm:p-6 lg:p-8 w-full;
+  animation: fadeUp 0.5s var(--m3-emphasized) both;
+}
+
+.products_search_bar {
+  @apply mb-4;
+}
+
+.products_search_input:focus {
+  @apply outline-none border-[var(--color-primary)];
+}
+
+.products_td_barcode {
+  @apply px-6 py-4 text-sm font-mono text-[var(--color-neutral)];
+}
+
+/* --- Card & Table --- */
+
+.products_card {
+  @apply bg-[var(--color-base-100)] rounded-[24px] shadow-sm overflow-hidden w-full;
+}
+
+.products_card_inner {
+  @apply p-0 overflow-x-auto;
+}
+
+.products_table {
+  @apply w-full;
+}
+
+.products_table_head {
+  @apply bg-[var(--color-base-200)]/50 text-[var(--color-neutral)];
+}
+
+.products_th {
+  @apply px-6 py-4 font-medium tracking-wide uppercase text-xs;
+}
+
+.products_th_right {
+  @apply px-6 py-4 font-medium tracking-wide uppercase text-xs text-right;
+}
+
+.products_row {
+  @apply hover:bg-[var(--color-base-200)]/30 transition-colors border-b border-[var(--color-base-300)] last:border-0;
+}
+
+.products_td {
+  @apply px-6 py-4;
+}
+
+.products_td_image {
+  @apply px-6 py-3 w-16;
+}
+
+.products_thumb {
+  @apply w-11 h-11 rounded-xl object-cover border border-[var(--color-base-300)];
+}
+
+.products_thumb_placeholder {
+  @apply w-11 h-11 rounded-xl bg-[var(--color-base-200)] flex items-center justify-center text-lg;
+}
+
+.products_td_name {
+  @apply px-6 py-4 font-medium text-[var(--color-base-content)];
+}
+
+.products_td_price {
+  @apply px-6 py-4 text-right font-medium text-[var(--color-primary)];
+}
+
+.products_td_stock {
+  @apply px-6 py-4 text-right;
+}
+
+.products_td_neutral {
+  @apply px-6 py-4 text-[var(--color-neutral)];
+}
+
+.products_td_expiry {
+  @apply px-6 py-4 text-[var(--color-neutral)] text-sm;
+}
+
+.products_td_actions {
+  @apply px-6 py-4 text-right;
+}
+
+.products_actions_wrapper {
+  @apply flex justify-end gap-2;
+}
+
+.products_stock_badge {
+  @apply font-medium;
+}
+
+.products_stock_badge_normal {
+  @apply bg-[var(--color-base-200)] font-medium;
+}
+
+.products_stock_badge_low {
+  @apply font-medium;
+}
+
+/* --- Empty State --- */
+
+.products_empty {
+  @apply p-10 text-center text-[var(--color-neutral)];
+}
+
+.products_empty_text {
+  @apply text-lg;
+}
+
+.products_empty_btn {
+  @apply mt-4 rounded-full px-6;
+}
+
+/* --- Loading --- */
+
+.products_loading {
+  @apply flex items-center justify-center h-64;
+}
+
+/* --- TopBar Action Button --- */
+
+.products_add_btn {
+  @apply rounded-full px-6 font-medium shadow-sm;
+}
+
+.products_edit_btn {
+  @apply text-[var(--color-info)];
+}
+
+.products_delete_btn {
+  @apply text-[var(--color-error)];
+}
+
+/* --- Modal --- */
+
+.products_modal_overlay {
+  /* classes moved to JSX classList */
+}
+
+.products_modal_box {
+  @apply bg-[var(--color-base-100)] rounded-[24px] max-w-md shadow-lg border border-[var(--color-base-300)] p-8;
+}
+
+.products_modal_title {
+  @apply font-bold text-2xl text-[var(--color-base-content)] mb-6;
+}
+
+.products_modal_backdrop {
+  @apply bg-black/20;
+}
+
+/* --- Form --- */
+
+.products_form {
+  @apply space-y-4;
+}
+
+/* --- Image upload --- */
+
+.products_image_field {
+  @apply flex items-center gap-4;
+}
+
+.products_image_preview {
+  @apply w-20 h-20 rounded-2xl bg-[var(--color-base-200)] border border-[var(--color-base-300)] flex items-center justify-center overflow-hidden flex-shrink-0;
+}
+
+.products_image_preview_img {
+  @apply w-full h-full object-cover;
+}
+
+.products_image_placeholder {
+  @apply text-3xl;
+}
+
+.products_image_upload {
+  @apply cursor-pointer;
+}
+
+.products_image_input {
+  @apply hidden;
+}
+
+.products_image_upload_btn {
+  @apply inline-flex items-center px-5 py-2 rounded-full border border-[var(--color-base-300)] text-sm font-medium text-[var(--color-base-content)];
+  transition: background-color 0.2s var(--m3-standard);
+}
+
+.products_image_upload_btn:hover {
+  background-color: color-mix(in srgb, var(--color-base-300) 35%, transparent);
+}
+
+.products_form_grid {
+  @apply grid grid-cols-2 gap-4;
+}
+
+.products_form_input {
+  @apply w-full rounded-2xl focus:border-[var(--color-primary)];
+}
+
+.products_form_select {
+  @apply w-full rounded-2xl focus:border-[var(--color-primary)];
+}
+
+.products_form_label {
+  @apply font-medium;
+}
+
+.products_modal_actions {
+  @apply mt-8 pt-4 border-t border-[var(--color-base-300)];
+}
+
+.products_cancel_btn {
+  @apply rounded-full px-6;
+}
+
+.products_save_btn {
+  @apply rounded-full px-8 shadow-sm;
+}

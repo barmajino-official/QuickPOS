@@ -1,0 +1,15 @@
+@reference "../../app.css";
+
+/**
+ * @file AppLayout.css
+ * @description Layout styles for the authenticated app shell — sidebar + scrollable main.
+ */
+
+.app_layout {
+  @apply flex h-screen w-full overflow-hidden bg-[var(--color-base-200)];
+}
+
+/* min-w-0 lets the main column shrink so wide tables scroll instead of pushing layout. */
+.app_main {
+  @apply flex-1 flex flex-col h-screen overflow-y-auto min-w-0;
+}

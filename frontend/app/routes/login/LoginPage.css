@@ -1,0 +1,100 @@
+@reference "../../app.css";
+
+/**
+ * @file LoginPage.css
+ * @description Styles for the LoginPage. Centered M3 card on a tonal background.
+ */
+
+.login_page {
+  @apply min-h-screen flex flex-col bg-[var(--color-base-200)];
+}
+
+.login_header {
+  @apply flex justify-between items-center px-6 py-5 sm:px-10;
+}
+
+.login_brand {
+  @apply text-xl font-bold tracking-tight text-[var(--color-primary)];
+}
+
+.login_container {
+  @apply flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24 w-full max-w-5xl px-6;
+}
+
+.login_lockscreen {
+  @apply flex flex-col items-center md:items-start text-center md:text-left select-none;
+  animation: fadeUp 0.6s var(--m3-standard) both;
+}
+
+.lockscreen_time {
+  @apply text-6xl sm:text-7xl md:text-8xl font-display font-light tracking-tight text-[var(--color-primary)] leading-none;
+  font-variation-settings: "wght" 300, "wdth" 100;
+}
+
+.lockscreen_date {
+  @apply text-lg sm:text-xl md:text-2xl font-display font-medium text-[var(--color-base-content)] mt-4 tracking-wide;
+  font-variation-settings: "wght" 400;
+}
+
+.lockscreen_greeting {
+  @apply text-xs uppercase tracking-widest text-[var(--color-neutral)] mt-3 font-mono opacity-80;
+}
+
+.login_theme_toggle,
+.swap {
+  @apply text-2xl;
+}
+
+.login_main {
+  @apply flex-1 flex items-center justify-center p-4 sm:p-6;
+}
+
+.login_card {
+  @apply bg-[var(--color-base-100)] w-full max-w-md rounded-[28px] p-8 sm:p-10;
+  animation: fadeUp 0.5s var(--m3-emphasized) both;
+}
+
+.login_card_head {
+  @apply mb-8 text-center;
+}
+
+.login_title {
+  @apply text-3xl font-display font-semibold text-[var(--color-base-content)] tracking-tight;
+  font-variation-settings: "wght" 500, "wdth" 105;
+}
+
+.login_subtitle {
+  @apply text-sm text-[var(--color-neutral)] mt-2;
+}
+
+.login_form {
+  @apply flex flex-col gap-5;
+}
+
+.login_field {
+  @apply flex flex-col gap-2;
+}
+
+.login_label {
+  @apply text-xs font-semibold text-[var(--color-base-content)] uppercase tracking-wider px-1 opacity-80;
+}
+
+.login_input {
+  @apply w-full rounded-2xl bg-[var(--color-base-100)] border-[var(--color-base-300)];
+}
+
+.login_input:focus {
+  @apply outline-none border-[var(--color-primary)] shadow-sm;
+}
+
+.login_submit {
+  @apply w-full mt-3 rounded-full text-sm font-semibold tracking-wide h-12 uppercase;
+}
+
+.login_toggle_wrap {
+  @apply mt-6 text-center;
+}
+
+.login_toggle_btn {
+  @apply text-sm font-medium text-[var(--color-primary)] hover:underline;
+}
