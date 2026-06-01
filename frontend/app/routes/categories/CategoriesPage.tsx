@@ -16,8 +16,6 @@ import { TopBar } from '~/components/AppLayout/TopBar/TopBar';
 
 import type { Category } from '~/types';
 
-import './CategoriesPage.css';
-
 /** Rows count for the description textarea. */
 const DESCRIPTION_ROWS = 3;
 
@@ -132,7 +130,7 @@ export default function CategoriesPage() {
           title="Categories"
           actions={
             <button
-              className="btn btn-primary btn-sm rounded-full categories_new_btn"
+              className="btn btn-primary btn-sm rounded-full px-6 font-medium shadow-sm"
               onClick={() => openModal()}
             >
               + New Category
@@ -140,51 +138,51 @@ export default function CategoriesPage() {
           }
         />
 
-        <div className="categories_page">
+        <div className="p-6 md:p-8 w-full [animation:fadeUp_0.5s_var(--m3-emphasized)_both]">
           {loading ? (
-            <div className="categories_loading">
-              <span className="loading loading-spinner loading-lg categories_spinner" />
+            <div className="flex items-center justify-center h-64">
+              <span className="loading loading-spinner loading-lg text-[var(--color-primary)]" />
             </div>
           ) : (
-            <div className="categories_card">
+            <div className="bg-[var(--color-base-100)] rounded-[24px] shadow-sm w-full overflow-hidden">
               {categories.length === 0 ? (
-                <div className="categories_empty">
-                  <p className="categories_empty_text">No categories yet.</p>
+                <div className="p-10 text-center text-[var(--color-neutral)]">
+                  <p className="text-lg">No categories yet.</p>
                   <button
-                    className="btn btn-primary mt-4 rounded-full px-6 categories_empty_btn"
+                    className="btn btn-primary mt-4 rounded-full px-6"
                     onClick={() => openModal()}
                   >
                     Add first category
                   </button>
                 </div>
               ) : (
-                <table className="table w-full categories_table">
-                  <thead className="categories_thead">
+                <table className="table w-full">
+                  <thead className="bg-[var(--color-base-200)]/50 text-[var(--color-neutral)]">
                     <tr>
-                      <th className="categories_th">Name</th>
-                      <th className="categories_th">Description</th>
-                      <th className="categories_th_actions">Actions</th>
+                      <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Name</th>
+                      <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Description</th>
+                      <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {categories.map((category) => (
-                      <tr key={category.id} className="categories_row">
-                        <td className="categories_td_name">
+                      <tr key={category.id} className="border-b border-[var(--color-base-300)] last:border-0 [transition:background-color_0.15s_var(--m3-standard)] hover:bg-[color-mix(in_srgb,var(--color-base-200)_30%,transparent)]">
+                        <td className="px-6 py-4 font-medium text-[var(--color-base-content)]">
                           {category.name}
                         </td>
-                        <td className="categories_td_desc">
+                        <td className="px-6 py-4 text-sm text-[var(--color-neutral)]">
                           {category.description ?? '—'}
                         </td>
-                        <td className="categories_td_actions">
-                          <div className="categories_actions_group">
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex justify-end gap-2">
                             <button
-                              className="btn btn-xs btn-ghost categories_btn_edit"
+                              className="btn btn-xs btn-ghost text-[var(--color-info)]"
                               onClick={() => openModal(category)}
                             >
                               Edit
                             </button>
                             <button
-                              className="btn btn-xs btn-ghost categories_btn_delete"
+                              className="btn btn-xs btn-ghost text-[var(--color-error)]"
                               onClick={() => handleDelete(category.id)}
                             >
                               Delete
@@ -202,56 +200,56 @@ export default function CategoriesPage() {
       </AppLayout>
 
       {isModalOpen && (
-        <div className="modal modal-open categories_modal_overlay">
-          <div className="modal-box categories_modal_box">
-            <h3 className="categories_modal_title">
+        <div className="modal modal-open">
+          <div className="modal-box bg-[var(--color-base-100)] rounded-[28px] max-w-md shadow-lg border border-[var(--color-base-300)] p-8">
+            <h3 className="font-bold text-2xl mb-6 text-[var(--color-base-content)]">
               {editingId ? 'Edit Category' : 'New Category'}
             </h3>
 
-            <form onSubmit={handleSubmit} className="categories_form">
-              <div className="form-control categories_form_group">
-                <label className="label categories_form_label">
-                  <span className="label-text categories_form_label_text">Name</span>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Name</span>
                 </label>
                 <input
                   type="text"
                   required
-                  className="input input-bordered w-full rounded-2xl categories_form_input"
+                  className="input input-bordered w-full rounded-2xl"
                   value={formData.name}
                   onChange={handleNameChange}
                 />
               </div>
 
-              <div className="form-control categories_form_group">
-                <label className="label categories_form_label">
-                  <span className="label-text categories_form_label_text">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">
                     Description
                   </span>
                 </label>
                 <textarea
-                  className="textarea textarea-bordered w-full rounded-2xl categories_form_textarea"
+                  className="textarea textarea-bordered w-full rounded-2xl"
                   rows={DESCRIPTION_ROWS}
                   value={formData.description}
                   onChange={handleDescriptionChange}
                 />
               </div>
 
-              <div className="modal-action categories_modal_actions">
+              <div className="modal-action mt-8 pt-4 border-t border-[var(--color-base-300)]">
                 <button
                   type="button"
-                  className="btn btn-ghost rounded-full px-6 categories_modal_cancel"
+                  className="btn btn-ghost rounded-full px-6"
                   onClick={closeModal}
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary rounded-full px-8 categories_modal_save">
+                <button type="submit" className="btn btn-primary rounded-full px-8">
                   Save
                 </button>
               </div>
             </form>
           </div>
           <div
-            className="modal-backdrop bg-black/20 categories_modal_backdrop"
+            className="modal-backdrop bg-black/20"
             onClick={closeModal}
           />
         </div>

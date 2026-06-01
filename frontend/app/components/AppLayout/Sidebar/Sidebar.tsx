@@ -14,7 +14,7 @@ import { useSessionStore } from '~/store/sessionStore';
 import { useUiStore } from '~/store/uiStore';
 import { NavItem } from './NavItem/NavItem';
 
-import './Sidebar.css';
+
 
 interface NavLink {
   label: string;
@@ -64,14 +64,14 @@ export function Sidebar() {
   return (
     <>
       <div
-        className={`sidebar_backdrop ${sidebarOpen ? 'sidebar_backdrop_open' : ''}`}
+        className={`fixed inset-0 z-40 bg-black/30 transition-opacity duration-300 ease-[var(--m3-standard)] md:hidden ${sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={closeSidebar}
       />
 
-      <aside className={`sidebar ${sidebarOpen ? 'sidebar_open' : ''}`}>
-        <div className="sidebar_brand">QuickPOS Pro</div>
+      <aside className={`w-[260px] flex-shrink-0 bg-[var(--color-base-100)] border-r border-[var(--color-base-300)] flex flex-col h-full z-50 fixed md:relative inset-y-0 left-0 transition-transform duration-300 ease-[var(--m3-emphasized)] md:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="h-16 flex items-center px-6 text-xl font-bold text-[var(--color-primary)] flex-shrink-0">QuickPOS Pro</div>
 
-        <nav className="sidebar_nav">
+        <nav className="flex-1 px-3 py-2 flex flex-col gap-1 overflow-y-auto">
           {visibleLinks.map((link) => (
             <NavItem
               key={link.to}
@@ -83,18 +83,18 @@ export function Sidebar() {
           ))}
         </nav>
 
-        <div className="sidebar_footer">
-          <Link to="/profile" className="sidebar_user" onClick={closeSidebar}>
-            <div className="sidebar_avatar">
+        <div className="p-3 border-t border-[var(--color-base-300)] flex-shrink-0">
+          <Link to="/profile" className="flex items-center gap-3 p-2 rounded-2xl transition-colors duration-200 ease-[var(--m3-standard)] hover:bg-[color-mix(in_srgb,var(--color-base-300)_40%,transparent)]" onClick={closeSidebar}>
+            <div className="w-10 h-10 rounded-full bg-[var(--color-secondary)] text-[var(--color-secondary-content)] flex items-center justify-center font-bold text-lg flex-shrink-0">
               {staff?.name?.charAt(0).toUpperCase() ?? '?'}
             </div>
-            <div className="sidebar_user_info">
-              <span className="sidebar_user_name">{staff?.name}</span>
-              <span className="sidebar_user_role">{staff?.role}</span>
+            <div className="flex flex-col min-w-0">
+              <span className="text-sm font-semibold text-[var(--color-base-content)] leading-tight truncate">{staff?.name}</span>
+              <span className="text-xs text-[var(--color-neutral)] uppercase tracking-wide mt-0.5">{staff?.role}</span>
             </div>
           </Link>
 
-          <button className="btn btn-outline btn-sm sidebar_logout" onClick={handleLogout}>
+          <button className="btn btn-outline btn-sm w-full mt-3 rounded-full" onClick={handleLogout}>
             Logout
           </button>
         </div>

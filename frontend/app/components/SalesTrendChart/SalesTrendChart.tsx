@@ -21,7 +21,6 @@ import {
 
 import type { DailySales } from '~/types';
 
-import './SalesTrendChart.css';
 
 interface Props {
   data: DailySales[];
@@ -51,7 +50,7 @@ const formatAxisMoney = (val: number) =>
 
 export function SalesTrendChart({ data }: Props) {
   return (
-    <div className="chart_wrap">
+    <div className="w-full">
       <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
         <ComposedChart data={data} margin={{ top: 10, right: 8, bottom: 0, left: -6 }}>
           <defs>
@@ -111,13 +110,13 @@ export function SalesTrendChart({ data }: Props) {
         </ComposedChart>
       </ResponsiveContainer>
 
-      <div className="chart_legend">
-        <span className="chart_legend_item">
-          <span className="chart_dot chart_dot_revenue" />
+      <div className="flex items-center justify-center gap-6 mt-3">
+        <span className="flex items-center gap-2 text-xs font-medium text-[var(--color-neutral)]">
+          <span className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0 bg-[var(--color-primary)]" />
           Revenue
         </span>
-        <span className="chart_legend_item">
-          <span className="chart_dot chart_dot_orders" />
+        <span className="flex items-center gap-2 text-xs font-medium text-[var(--color-neutral)]">
+          <span className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0 bg-[var(--color-accent)]" />
           Orders
         </span>
       </div>
@@ -135,15 +134,15 @@ function ChartTooltip({ active, payload, label }: ChartTooltipProps) {
     : '';
 
   return (
-    <div className="chart_tooltip">
-      <div className="chart_tooltip_date">{dateLabel}</div>
-      <div className="chart_tooltip_row">
-        <span className="chart_dot chart_dot_revenue" />
-        Revenue: <strong>{formatCurrency(revenue)}</strong>
+    <div className="bg-[var(--color-base-100)] border border-[var(--color-base-300)] rounded-2xl px-4 py-3 shadow-lg">
+      <div className="text-sm font-semibold text-[var(--color-base-content)] mb-2">{dateLabel}</div>
+      <div className="flex items-center gap-2 text-xs text-[var(--color-neutral)]">
+        <span className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0 bg-[var(--color-primary)]" />
+        Revenue: <strong className="text-[var(--color-base-content)] font-semibold ml-1">{formatCurrency(revenue)}</strong>
       </div>
-      <div className="chart_tooltip_row">
-        <span className="chart_dot chart_dot_orders" />
-        Orders: <strong>{orders}</strong>
+      <div className="flex items-center gap-2 text-xs text-[var(--color-neutral)]">
+        <span className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0 bg-[var(--color-accent)]" />
+        Orders: <strong className="text-[var(--color-base-content)] font-semibold ml-1">{orders}</strong>
       </div>
     </div>
   );

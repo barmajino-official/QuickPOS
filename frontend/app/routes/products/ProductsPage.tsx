@@ -29,7 +29,6 @@ import { TopBar } from '~/components/AppLayout/TopBar/TopBar';
 import type { Product, Category, Brand } from '~/types';
 
 // 7. Styles (always last)
-import './ProductsPage.css';
 
 // --- Constants ---
 const LOW_STOCK_THRESHOLD = 5;
@@ -296,85 +295,85 @@ export default function ProductsPage() {
 
   const renderTable = (prods: Product[]) => (
     <div className="overflow-x-auto">
-      <table className="table w-full products_table">
-        <thead className="products_table_head">
+      <table className="table w-full">
+        <thead className="bg-[var(--color-base-200)]/50 text-[var(--color-neutral)]">
           <tr>
-            <th className="products_th">Image</th>
-            <th className="products_th cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('name')}>
+            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Image</th>
+            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('name')}>
               Name {sortConfig?.key === 'name' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
             </th>
-            <th className="products_th cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('barcode')}>
+            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('barcode')}>
               Barcode {sortConfig?.key === 'barcode' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
             </th>
-            <th className="products_th_right cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('price')}>
+            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs text-right cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('price')}>
               Price {sortConfig?.key === 'price' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
             </th>
-            <th className="products_th_right cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('stock')}>
+            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs text-right cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('stock')}>
               Stock {sortConfig?.key === 'stock' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
             </th>
-            <th className="products_th cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('category')}>
+            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('category')}>
               Category {sortConfig?.key === 'category' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
             </th>
-            <th className="products_th cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('brand')}>
+            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('brand')}>
               Brand {sortConfig?.key === 'brand' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
             </th>
-            <th className="products_th cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('expiryDate')}>
+            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('expiryDate')}>
               Expiry {sortConfig?.key === 'expiryDate' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
             </th>
-            <th className="products_th_right">Actions</th>
+            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs text-right">Actions</th>
           </tr>
         </thead>
         <tbody>
           {prods.map((p) => (
-            <tr key={p.id} className="products_row">
-              <td className="products_td_image">
+            <tr key={p.id} className="hover:bg-[var(--color-base-200)]/30 transition-colors border-b border-[var(--color-base-300)] last:border-0">
+              <td className="px-6 py-3 w-16">
                 {p.imageUrl ? (
                   <img
                     src={toImageSrc(p.imageUrl)}
                     alt={p.name}
-                    className="products_thumb"
+                    className="w-11 h-11 rounded-xl object-cover border border-[var(--color-base-300)]"
                   />
                 ) : (
-                  <span className="products_thumb_placeholder">🛍️</span>
+                  <span className="w-11 h-11 rounded-xl bg-[var(--color-base-200)] flex items-center justify-center text-lg">🛍️</span>
                 )}
               </td>
-              <td className="products_td_name">{p.name}</td>
-              <td className="products_td_barcode">{p.barcode || '-'}</td>
-              <td className="products_td_price">
+              <td className="px-6 py-4 font-medium text-[var(--color-base-content)]">{p.name}</td>
+              <td className="px-6 py-4 text-sm font-mono text-[var(--color-neutral)]">{p.barcode || '-'}</td>
+              <td className="px-6 py-4 text-right font-medium text-[var(--color-primary)]">
                 {formatCurrency(p.price)}
               </td>
-              <td className="products_td_stock">
+              <td className="px-6 py-4 text-right">
                 <span
                   className={
                     p.stock <= LOW_STOCK_THRESHOLD
-                      ? 'badge badge-error font-medium products_stock_badge_low'
-                      : 'badge badge-ghost bg-[var(--color-base-200)] font-medium products_stock_badge_normal'
+                      ? 'badge badge-error font-medium'
+                      : 'badge badge-ghost bg-[var(--color-base-200)] font-medium'
                   }
                 >
                   {p.stock}
                 </span>
               </td>
-              <td className="products_td_neutral">
+              <td className="px-6 py-4 text-[var(--color-neutral)]">
                 {p.category?.name || '-'}
               </td>
-              <td className="products_td_neutral">
+              <td className="px-6 py-4 text-[var(--color-neutral)]">
                 {p.brand?.name || '-'}
               </td>
-              <td className="products_td_expiry">
+              <td className="px-6 py-4 text-[var(--color-neutral)] text-sm">
                 {p.expiryDate
                   ? new Date(p.expiryDate).toLocaleDateString()
                   : '-'}
               </td>
-              <td className="products_td_actions">
-                <div className="products_actions_wrapper">
+              <td className="px-6 py-4 text-right">
+                <div className="flex justify-end gap-2">
                   <button
-                    className="btn btn-xs btn-ghost products_edit_btn"
+                    className="btn btn-xs btn-ghost text-[var(--color-info)]"
                     onClick={() => handleOpenModal(p)}
                   >
                     Edit
                   </button>
                   <button
-                    className="btn btn-xs btn-ghost products_delete_btn"
+                    className="btn btn-xs btn-ghost text-[var(--color-error)]"
                     onClick={() => handleDelete(p.id)}
                   >
                     Delete
@@ -395,7 +394,7 @@ export default function ProductsPage() {
           title="Products"
           actions={
             <button
-              className="btn btn-primary btn-sm rounded-full products_add_btn"
+              className="btn btn-primary btn-sm rounded-full px-6 font-medium shadow-sm"
               onClick={() => handleOpenModal()}
             >
               + New Product
@@ -403,12 +402,12 @@ export default function ProductsPage() {
           }
         />
 
-        <div className="products_page">
-          <div className="products_search_bar flex flex-wrap gap-4 items-center">
+        <div className="p-4 sm:p-6 lg:p-8 w-full [animation:fadeUp_0.5s_var(--m3-emphasized)_both]">
+          <div className="mb-4 flex flex-wrap gap-4 items-center">
             <input
               type="text"
               placeholder="Search by name or barcode…"
-              className="input input-bordered w-full max-w-md rounded-full bg-[var(--color-base-100)] products_search_input"
+              className="input input-bordered w-full max-w-md rounded-full bg-[var(--color-base-100)] focus:outline-none focus:border-[var(--color-primary)]"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -424,16 +423,16 @@ export default function ProductsPage() {
           </div>
 
           {loading ? (
-            <div className="products_loading">
+            <div className="flex items-center justify-center h-64">
               <span className="loading loading-spinner loading-lg text-[var(--color-primary)]" />
             </div>
           ) : products.length === 0 ? (
-            <div className="products_card">
-              <div className="products_card_inner">
-                <div className="products_empty">
-                  <p className="products_empty_text">No products found.</p>
+            <div className="bg-[var(--color-base-100)] rounded-[24px] shadow-sm overflow-hidden w-full">
+              <div className="p-0 overflow-x-auto">
+                <div className="p-10 text-center text-[var(--color-neutral)]">
+                  <p className="text-lg">No products found.</p>
                   <button
-                    className="btn btn-primary mt-4 rounded-full px-6 products_empty_btn"
+                    className="btn btn-primary mt-4 rounded-full px-6"
                     onClick={() => handleOpenModal()}
                   >
                     Add your first product
@@ -444,8 +443,8 @@ export default function ProductsPage() {
           ) : (
             <div className="flex flex-col gap-6">
               {groupedProducts.map((group) => (
-                <div key={group.id} className="products_card">
-                  <div className="products_card_inner">
+                <div key={group.id} className="bg-[var(--color-base-100)] rounded-[24px] shadow-sm overflow-hidden w-full">
+                  <div className="p-0 overflow-x-auto">
                     {viewMode !== 'all' && (
                       <div className="flex items-center justify-between mb-4 px-4 py-3 bg-[var(--color-base-200)] m-2 rounded-2xl">
                         <div className="flex items-center gap-4">
@@ -495,29 +494,29 @@ export default function ProductsPage() {
 
       {/* Modal — rendered inside ProtectedRoute, outside AppLayout */}
       {isModalOpen && (
-        <div className="modal modal-open products_modal_overlay">
-          <div className="modal-box products_modal_box">
-            <h3 className="products_modal_title">
+        <div className="modal modal-open">
+          <div className="modal-box bg-[var(--color-base-100)] rounded-[24px] max-w-md shadow-lg border border-[var(--color-base-300)] p-8">
+            <h3 className="font-bold text-2xl text-[var(--color-base-content)] mb-6">
               {editingId ? 'Edit Product' : 'Add New Product'}
             </h3>
 
-            <form onSubmit={handleSubmit} className="products_form">
-              <div className="products_image_field">
-                <div className="products_image_preview">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="w-20 h-20 rounded-2xl bg-[var(--color-base-200)] border border-[var(--color-base-300)] flex items-center justify-center overflow-hidden flex-shrink-0">
                   {imagePreview ? (
-                    <img src={imagePreview} alt="Preview" className="products_image_preview_img" />
+                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="products_image_placeholder">🛍️</span>
+                    <span className="text-3xl">🛍️</span>
                   )}
                 </div>
-                <label className="products_image_upload">
+                <label className="cursor-pointer">
                   <input
                     type="file"
                     accept="image/*"
-                    className="products_image_input"
+                    className="hidden"
                     onChange={handleImageChange}
                   />
-                  <span className="products_image_upload_btn">
+                  <span className="inline-flex items-center px-5 py-2 rounded-full border border-[var(--color-base-300)] text-sm font-medium text-[var(--color-base-content)] [transition:background-color_0.2s_var(--m3-standard)] hover:bg-[color-mix(in_srgb,var(--color-base-300)_35%,transparent)]">
                     {imagePreview ? 'Change image' : 'Upload image'}
                   </span>
                 </label>
@@ -525,12 +524,12 @@ export default function ProductsPage() {
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text products_form_label">Name</span>
+                  <span className="label-text font-medium">Name</span>
                 </label>
                 <input
                   type="text"
                   required
-                  className="input input-bordered w-full rounded-2xl focus:border-[var(--color-primary)] products_form_input"
+                  className="input input-bordered w-full rounded-2xl focus:border-[var(--color-primary)]"
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
@@ -538,16 +537,16 @@ export default function ProductsPage() {
                 />
               </div>
 
-              <div className="products_form_grid">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text products_form_label">Price</span>
+                    <span className="label-text font-medium">Price</span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
                     required
-                    className="input input-bordered w-full rounded-2xl focus:border-[var(--color-primary)] products_form_input"
+                    className="input input-bordered w-full rounded-2xl focus:border-[var(--color-primary)]"
                     value={formData.price}
                     onChange={(e) =>
                       setFormData({ ...formData, price: e.target.value })
@@ -556,12 +555,12 @@ export default function ProductsPage() {
                 </div>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text products_form_label">Cost</span>
+                    <span className="label-text font-medium">Cost</span>
                   </label>
                   <input
                     type="number"
                     step="0.01"
-                    className="input input-bordered w-full rounded-2xl focus:border-[var(--color-primary)] products_form_input"
+                    className="input input-bordered w-full rounded-2xl focus:border-[var(--color-primary)]"
                     value={formData.cost}
                     onChange={(e) =>
                       setFormData({ ...formData, cost: e.target.value })
@@ -570,15 +569,15 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              <div className="products_form_grid">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text products_form_label">Stock</span>
+                    <span className="label-text font-medium">Stock</span>
                   </label>
                   <input
                     type="number"
                     required
-                    className="input input-bordered w-full rounded-2xl focus:border-[var(--color-primary)] products_form_input"
+                    className="input input-bordered w-full rounded-2xl focus:border-[var(--color-primary)]"
                     value={formData.stock}
                     onChange={(e) =>
                       setFormData({ ...formData, stock: e.target.value })
@@ -587,11 +586,11 @@ export default function ProductsPage() {
                 </div>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text products_form_label">Barcode</span>
+                    <span className="label-text font-medium">Barcode</span>
                   </label>
                   <input
                     type="text"
-                    className="input input-bordered w-full rounded-2xl focus:border-[var(--color-primary)] products_form_input"
+                    className="input input-bordered w-full rounded-2xl focus:border-[var(--color-primary)]"
                     value={formData.barcode}
                     onChange={(e) =>
                       setFormData({ ...formData, barcode: e.target.value })
@@ -600,13 +599,13 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              <div className="products_form_grid">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text products_form_label">Category</span>
+                    <span className="label-text font-medium">Category</span>
                   </label>
                   <select
-                    className="select select-bordered w-full rounded-2xl focus:border-[var(--color-primary)] products_form_select"
+                    className="select select-bordered w-full rounded-2xl focus:border-[var(--color-primary)]"
                     value={formData.categoryId}
                     onChange={(e) =>
                       setFormData({ ...formData, categoryId: e.target.value })
@@ -622,10 +621,10 @@ export default function ProductsPage() {
                 </div>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text products_form_label">Brand</span>
+                    <span className="label-text font-medium">Brand</span>
                   </label>
                   <select
-                    className="select select-bordered w-full rounded-2xl focus:border-[var(--color-primary)] products_form_select"
+                    className="select select-bordered w-full rounded-2xl focus:border-[var(--color-primary)]"
                     value={formData.brandId}
                     onChange={(e) =>
                       setFormData({ ...formData, brandId: e.target.value })
@@ -643,13 +642,13 @@ export default function ProductsPage() {
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text products_form_label">
+                  <span className="label-text font-medium">
                     Expiry Date (Optional)
                   </span>
                 </label>
                 <input
                   type="date"
-                  className="input input-bordered w-full rounded-2xl focus:border-[var(--color-primary)] products_form_input"
+                  className="input input-bordered w-full rounded-2xl focus:border-[var(--color-primary)]"
                   value={formData.expiryDate}
                   onChange={(e) =>
                     setFormData({ ...formData, expiryDate: e.target.value })
@@ -657,22 +656,22 @@ export default function ProductsPage() {
                 />
               </div>
 
-              <div className="modal-action products_modal_actions">
+              <div className="modal-action mt-8 pt-4 border-t border-[var(--color-base-300)]">
                 <button
                   type="button"
-                  className="btn btn-ghost rounded-full px-6 products_cancel_btn"
+                  className="btn btn-ghost rounded-full px-6"
                   onClick={handleCloseModal}
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary rounded-full px-8 shadow-sm products_save_btn">
+                <button type="submit" className="btn btn-primary rounded-full px-8 shadow-sm">
                   Save Product
                 </button>
               </div>
             </form>
           </div>
           <div
-            className="modal-backdrop bg-black/20 products_modal_backdrop"
+            className="modal-backdrop bg-black/20"
             onClick={handleCloseModal}
           />
         </div>

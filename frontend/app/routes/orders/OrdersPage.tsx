@@ -13,7 +13,6 @@ import { ProtectedRoute } from '~/components/ProtectedRoute/ProtectedRoute';
 import { AppLayout } from '~/components/AppLayout/AppLayout';
 import { TopBar } from '~/components/AppLayout/TopBar/TopBar';
 import type { Order } from '~/types';
-import './OrdersPage.css';
 
 /** Invoice prefix pad length */
 const INVOICE_PAD = 6;
@@ -87,64 +86,64 @@ export default function OrdersPage() {
       <AppLayout>
         <TopBar title="Orders" />
 
-        <div className="orders_page">
+        <div className="p-6 md:p-8 w-full [animation:fadeUp_0.5s_var(--m3-emphasized)_both]">
           {loading ? (
-            <div className="orders_loading">
-              <span className="loading loading-spinner loading-lg orders_spinner" />
+            <div className="flex items-center justify-center h-64">
+              <span className="loading loading-spinner loading-lg text-[var(--color-primary)]" />
             </div>
           ) : (
-            <div className="orders_card">
+            <div className="bg-[var(--color-base-100)] rounded-[24px] shadow-sm overflow-hidden w-full">
               {orders.length === 0 ? (
-                <div className="orders_empty">
-                  <p className="orders_empty_text">No orders yet.</p>
+                <div className="p-10 text-center text-[var(--color-neutral)]">
+                  <p className="text-lg">No orders yet.</p>
                 </div>
               ) : (
-                <div className="orders_scroll">
-                  <table className="table w-full orders_table">
-                    <thead className="orders_thead">
+                <div className="overflow-x-auto">
+                  <table className="table w-full">
+                    <thead className="bg-[var(--color-base-200)]/50 text-[var(--color-neutral)]">
                       <tr>
-                        <th className="orders_th">Invoice</th>
-                        <th className="orders_th">Customer</th>
-                        <th className="orders_th">Staff</th>
-                        <th className="orders_th_right">Total</th>
-                        <th className="orders_th">Status</th>
-                        <th className="orders_th">Date</th>
-                        <th className="orders_th_right">Actions</th>
+                        <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Invoice</th>
+                        <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Customer</th>
+                        <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Staff</th>
+                        <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs text-right">Total</th>
+                        <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Status</th>
+                        <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Date</th>
+                        <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs text-right">Actions</th>
                       </tr>
                     </thead>
 
                     <tbody>
                       {orders.map((o) => (
-                        <tr key={o.id} className="orders_row">
-                          <td className="orders_td_invoice">
+                        <tr key={o.id} className="border-b border-[var(--color-base-300)] last:border-0 [transition:background-color_0.15s_var(--m3-standard)] hover:bg-[color-mix(in_srgb,var(--color-base-200)_30%,transparent)]">
+                          <td className="px-6 py-4 font-mono text-sm font-medium text-[var(--color-primary)]">
                             INV-{String(o.id).padStart(INVOICE_PAD, '0')}
                           </td>
-                          <td className="orders_td">{o.customerName ?? 'Guest'}</td>
-                          <td className="orders_td_staff">{o.staffName ?? '—'}</td>
-                          <td className="orders_td_total">{formatCurrency(o.total)}</td>
-                          <td className="orders_td">
+                          <td className="px-6 py-4 text-sm">{o.customerName ?? 'Guest'}</td>
+                          <td className="px-6 py-4 text-sm text-[var(--color-neutral)]">{o.staffName ?? '—'}</td>
+                          <td className="px-6 py-4 text-right font-medium">{formatCurrency(o.total)}</td>
+                          <td className="px-6 py-4 text-sm">
                             <span
                               className={
                                 o.status === 'Completed'
-                                  ? 'badge badge-sm badge-success orders_badge_completed'
-                                  : 'badge badge-sm badge-warning orders_badge_pending'
+                                  ? 'badge badge-sm badge-success font-medium'
+                                  : 'badge badge-sm badge-warning font-medium'
                               }
                             >
                               {o.status}
                             </span>
                           </td>
-                          <td className="orders_td_date">{formatDate(o.createdAt)}</td>
-                          <td className="orders_td_actions">
-                            <div className="orders_actions_group">
+                          <td className="px-6 py-4 text-xs text-[var(--color-neutral)]">{formatDate(o.createdAt)}</td>
+                          <td className="px-6 py-4 text-right">
+                            <div className="flex justify-end gap-2">
                               <button
-                                className="btn btn-xs btn-ghost orders_btn_receipt"
+                                className="btn btn-xs btn-ghost text-[var(--color-info)]"
                                 onClick={() => handleViewReceipt(o.id)}
                                 disabled={receiptLoading}
                               >
                                 Receipt
                               </button>
                               <button
-                                className="btn btn-xs btn-ghost orders_btn_delete"
+                                className="btn btn-xs btn-ghost text-[var(--color-error)]"
                                 onClick={() => handleDelete(o.id)}
                               >
                                 Delete
@@ -165,54 +164,54 @@ export default function OrdersPage() {
       {/* ── Receipt modal ──────────────────────────────────────── */}
 
       {receipt && (
-        <div className="modal modal-open receipt_overlay print:modal-close">
-          <div className="modal-box receipt_card">
-            <div className="receipt_header">
-              <h2 className="receipt_title">QuickPOS Pro</h2>
-              <p className="receipt_subtitle">Sales Receipt</p>
+        <div className="modal modal-open print:modal-close">
+          <div className="modal-box bg-[var(--color-base-100)] rounded-[24px] max-w-md shadow-lg border border-[var(--color-base-300)] p-0 overflow-hidden">
+            <div className="bg-[var(--color-base-200)]/50 px-8 py-6 text-center border-b border-[var(--color-base-300)]">
+              <h2 className="text-xl font-bold">QuickPOS Pro</h2>
+              <p className="text-xs text-[var(--color-neutral)] mt-1">Sales Receipt</p>
             </div>
 
-            <div className="receipt_body">
-              <div className="receipt_meta_row">
-                <span className="receipt_meta_label">Invoice</span>
-                <span className="receipt_meta_value">
+            <div className="px-8 py-6 space-y-4">
+              <div className="flex justify-between text-sm">
+                <span className="text-[var(--color-neutral)]">Invoice</span>
+                <span className="font-mono font-medium">
                   INV-{String(receipt.id).padStart(INVOICE_PAD, '0')}
                 </span>
               </div>
-              <div className="receipt_meta_row">
-                <span className="receipt_meta_label">Date</span>
+              <div className="flex justify-between text-sm">
+                <span className="text-[var(--color-neutral)]">Date</span>
                 <span>{formatDate(receipt.createdAt)}</span>
               </div>
-              <div className="receipt_meta_row">
-                <span className="receipt_meta_label">Customer</span>
+              <div className="flex justify-between text-sm">
+                <span className="text-[var(--color-neutral)]">Customer</span>
                 <span>{receipt.customerName ?? 'Guest'}</span>
               </div>
-              <div className="receipt_meta_row">
-                <span className="receipt_meta_label">Staff</span>
+              <div className="flex justify-between text-sm">
+                <span className="text-[var(--color-neutral)]">Staff</span>
                 <span>{receipt.staffName ?? '—'}</span>
               </div>
 
-              <div className="divider my-2 receipt_divider" />
+              <div className="divider my-2" />
 
-              <table className="table table-sm w-full receipt_table">
-                <thead className="receipt_thead">
+              <table className="table table-sm w-full">
+                <thead className="text-[var(--color-neutral)] text-xs uppercase">
                   <tr>
-                    <th className="receipt_item_th">Item</th>
-                    <th className="receipt_qty_th">Qty</th>
-                    <th className="receipt_total_th">Total</th>
+                    <th className="pl-0">Item</th>
+                    <th className="text-center">Qty</th>
+                    <th className="text-right pr-0">Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(receipt.items ?? []).map((item) => (
-                    <tr key={item.id} className="receipt_item_row">
-                      <td className="receipt_item_cell">
-                        <div className="receipt_item_name">{item.productName}</div>
-                        <div className="receipt_item_price">
+                    <tr key={item.id} className="border-0">
+                      <td className="pl-0 py-2">
+                        <div className="font-medium text-sm">{item.productName}</div>
+                        <div className="text-xs text-[var(--color-neutral)]">
                           {formatCurrency(item.unitPrice)} each
                         </div>
                       </td>
-                      <td className="receipt_qty_cell">{item.quantity}</td>
-                      <td className="receipt_total_cell">
+                      <td className="text-center py-2 text-sm">{item.quantity}</td>
+                      <td className="text-right pr-0 py-2 font-medium text-sm">
                         {formatCurrency(item.unitPrice * item.quantity)}
                       </td>
                     </tr>
@@ -220,27 +219,27 @@ export default function OrdersPage() {
                 </tbody>
               </table>
 
-              <div className="divider my-2 receipt_divider" />
+              <div className="divider my-2" />
 
-              <div className="receipt_grand_total">
+              <div className="flex justify-between text-lg font-bold">
                 <span>Grand Total</span>
-                <span className="receipt_grand_total_value">
+                <span className="text-[var(--color-primary)]">
                   {formatCurrency(receipt.total)}
                 </span>
               </div>
             </div>
 
-            <div className="receipt_actions print:hidden">
-              <button className="btn btn-ghost flex-1 rounded-full receipt_btn_close" onClick={handleCloseReceipt}>
+            <div className="px-8 pb-6 flex gap-3 print:hidden">
+              <button className="btn btn-ghost flex-1 rounded-full" onClick={handleCloseReceipt}>
                 Close
               </button>
-              <button className="btn btn-primary flex-1 rounded-full receipt_btn_print" onClick={handlePrint}>
+              <button className="btn btn-primary flex-1 rounded-full" onClick={handlePrint}>
                 Print
               </button>
             </div>
           </div>
 
-          <div className="modal-backdrop bg-black/20 receipt_backdrop print:hidden" onClick={handleCloseReceipt} />
+          <div className="modal-backdrop bg-black/20 print:hidden" onClick={handleCloseReceipt} />
         </div>
       )}
     </ProtectedRoute>

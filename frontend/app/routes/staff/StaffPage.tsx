@@ -17,8 +17,6 @@ import { AppLayout } from '~/components/AppLayout/AppLayout';
 import { TopBar } from '~/components/AppLayout/TopBar/TopBar';
 import type { Staff } from '~/types';
 
-import './StaffPage.css';
-
 const ALL_PERMISSIONS = ['dashboard', 'pos', 'orders', 'products', 'categories', 'customers', 'staff'] as const;
 
 const DEFAULT_PERMISSIONS: Record<string, boolean> = {
@@ -27,9 +25,9 @@ const DEFAULT_PERMISSIONS: Record<string, boolean> = {
 };
 
 const roleClass = (role: string) => {
-  if (role === 'Admin') return 'badge badge-primary staff_role_badge staff_role_admin';
-  if (role === 'Manager') return 'badge badge-secondary staff_role_badge staff_role_manager';
-  return 'badge badge-ghost staff_role_badge staff_role_cashier';
+  if (role === 'Admin') return 'badge badge-primary font-medium';
+  if (role === 'Manager') return 'badge badge-secondary font-medium';
+  return 'badge badge-ghost font-medium';
 };
 
 export default function StaffPage() {
@@ -125,58 +123,58 @@ export default function StaffPage() {
         <TopBar
           title="Staff"
           actions={
-            <button className="btn btn-primary btn-sm rounded-full staff_new_btn" onClick={() => openModal()}>
+            <button className="btn btn-primary btn-sm rounded-full px-6 font-medium shadow-sm" onClick={() => openModal()}>
               + New Staff
             </button>
           }
         />
 
-        <div className="staff_page">
+        <div className="p-4 sm:p-6 lg:p-8 w-full animate-[fadeUp_0.5s_var(--m3-emphasized)_both]">
           {loading ? (
-            <div className="staff_loading">
-              <span className="loading loading-spinner loading-lg text-[var(--color-primary)] staff_spinner" />
+            <div className="flex items-center justify-center h-64">
+              <span className="loading loading-spinner loading-lg text-[var(--color-primary)]" />
             </div>
           ) : (
-            <div className="staff_card">
-              <div className="staff_scroll">
-                <table className="table w-full staff_table">
-                  <thead className="staff_thead">
+            <div className="bg-[var(--color-base-100)] rounded-[24px] shadow-sm w-full overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="table w-full">
+                  <thead className="bg-[var(--color-base-200)]/50 text-[var(--color-neutral)]">
                     <tr>
-                      <th className="staff_th">Name</th>
-                      <th className="staff_th">Email</th>
-                      <th className="staff_th">Role</th>
-                      <th className="staff_th">Permissions</th>
-                      <th className="staff_th_actions">Actions</th>
+                      <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Name</th>
+                      <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Email</th>
+                      <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Role</th>
+                      <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Permissions</th>
+                      <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {staffList.map((s) => (
-                      <tr key={s.id} className="staff_row">
-                        <td className="staff_td_name">
-                          <div className="staff_name_cell">
-                            <span className="staff_avatar">{s.name.charAt(0).toUpperCase()}</span>
-                            <div className="staff_name_info">
-                              <span className="staff_name_text">{s.name}</span>
-                              {s.id === me?.id && <span className="staff_you">(you)</span>}
+                      <tr key={s.id} className="border-b border-[var(--color-base-300)] last:border-0 transition-[background-color] duration-150 ease-[var(--m3-standard)] hover:bg-[color-mix(in_srgb,var(--color-base-200)_30%,transparent)]">
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <span className="w-9 h-9 rounded-full bg-[var(--color-primary)] text-[var(--color-primary-content)] flex items-center justify-center text-sm font-bold flex-shrink-0">{s.name.charAt(0).toUpperCase()}</span>
+                            <div className="flex flex-col">
+                              <span className="font-medium text-[var(--color-base-content)]">{s.name}</span>
+                              {s.id === me?.id && <span className="text-xs text-[var(--color-neutral)]">(you)</span>}
                             </div>
                           </div>
                         </td>
-                        <td className="staff_td">{s.email}</td>
-                        <td className="staff_td">
+                        <td className="px-6 py-4 text-sm text-[var(--color-neutral)]">{s.email}</td>
+                        <td className="px-6 py-4 text-sm text-[var(--color-neutral)]">
                           <span className={roleClass(s.role)}>{s.role}</span>
                         </td>
-                        <td className="staff_td">
-                          <div className="staff_perms">
+                        <td className="px-6 py-4 text-sm text-[var(--color-neutral)]">
+                          <div className="flex flex-wrap gap-1 max-w-[280px]">
                             {Object.entries(s.permissions).filter(([, v]) => v).map(([k]) => (
-                              <span key={k} className="badge badge-ghost badge-sm bg-[var(--color-base-200)] text-[var(--color-neutral)] staff_perm_chip">{k}</span>
+                              <span key={k} className="badge badge-ghost badge-sm bg-[var(--color-base-200)] text-[var(--color-neutral)]">{k}</span>
                             ))}
                           </div>
                         </td>
-                        <td className="staff_td_actions">
-                          <div className="staff_actions_group">
-                            <button className="btn btn-xs btn-ghost staff_btn_edit" onClick={() => openModal(s)}>Edit</button>
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex justify-end gap-2">
+                            <button className="btn btn-xs btn-ghost text-[var(--color-info)]" onClick={() => openModal(s)}>Edit</button>
                             {s.id !== me?.id && (
-                              <button className="btn btn-xs btn-ghost staff_btn_delete" onClick={() => handleDelete(s.id)}>Delete</button>
+                              <button className="btn btn-xs btn-ghost text-[var(--color-error)]" onClick={() => handleDelete(s.id)}>Delete</button>
                             )}
                           </div>
                         </td>
@@ -191,41 +189,41 @@ export default function StaffPage() {
       </AppLayout>
 
       {isModalOpen && (
-        <div className="modal modal-open staff_modal_overlay">
-          <div className="modal-box staff_modal_box">
-            <h3 className="staff_modal_title">{editingId ? 'Edit Staff Member' : 'New Staff Member'}</h3>
-            <form onSubmit={handleSubmit} className="staff_form">
-              <div className="staff_form_row">
-                <div className="staff_form_group">
-                  <label className="staff_form_label">Full name</label>
-                  <input type="text" required className="input input-bordered w-full rounded-2xl staff_form_input"
+        <div className="modal modal-open">
+          <div className="modal-box bg-[var(--color-base-100)] rounded-[28px] max-w-lg shadow-lg border border-[var(--color-base-300)] p-8">
+            <h3 className="font-bold text-2xl mb-6 text-[var(--color-base-content)]">{editingId ? 'Edit Staff Member' : 'New Staff Member'}</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium text-[var(--color-base-content)] px-1">Full name</label>
+                  <input type="text" required className="input input-bordered w-full rounded-2xl focus:outline-none focus:border-[var(--color-primary)]"
                     value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
                 </div>
-                <div className="staff_form_group">
-                  <label className="staff_form_label">Phone</label>
-                  <input type="tel" className="input input-bordered w-full rounded-2xl staff_form_input"
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium text-[var(--color-base-content)] px-1">Phone</label>
+                  <input type="tel" className="input input-bordered w-full rounded-2xl focus:outline-none focus:border-[var(--color-primary)]"
                     value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} />
                 </div>
               </div>
 
               {!editingId && (
-                <div className="staff_form_row">
-                  <div className="staff_form_group">
-                    <label className="staff_form_label">Email</label>
-                    <input type="email" required className="input input-bordered w-full rounded-2xl staff_form_input"
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-sm font-medium text-[var(--color-base-content)] px-1">Email</label>
+                    <input type="email" required className="input input-bordered w-full rounded-2xl focus:outline-none focus:border-[var(--color-primary)]"
                       value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
                   </div>
-                  <div className="staff_form_group">
-                    <label className="staff_form_label">Password</label>
-                    <input type="password" required className="input input-bordered w-full rounded-2xl staff_form_input"
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-sm font-medium text-[var(--color-base-content)] px-1">Password</label>
+                    <input type="password" required className="input input-bordered w-full rounded-2xl focus:outline-none focus:border-[var(--color-primary)]"
                       value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
                   </div>
                 </div>
               )}
 
-              <div className="staff_form_group">
-                <label className="staff_form_label">Role</label>
-                <select className="select select-bordered w-full rounded-2xl staff_form_select"
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-[var(--color-base-content)] px-1">Role</label>
+                <select className="select select-bordered w-full rounded-2xl"
                   value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })}>
                   <option>Cashier</option>
                   <option>Manager</option>
@@ -233,30 +231,30 @@ export default function StaffPage() {
                 </select>
               </div>
 
-              <div className="staff_form_group">
-                <label className="staff_form_label">Permissions</label>
-                <div className="staff_perm_grid">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-[var(--color-base-content)] px-1">Permissions</label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-1">
                   {ALL_PERMISSIONS.map((key) => (
-                    <label key={key} className="staff_perm_option">
+                    <label key={key} className="flex items-center gap-2 cursor-pointer select-none">
                       <input
                         type="checkbox"
                         className="checkbox checkbox-sm checkbox-primary"
                         checked={!!formData.permissions[key]}
                         onChange={() => togglePermission(key)}
                       />
-                      <span className="staff_perm_label">{key}</span>
+                      <span className="text-sm capitalize">{key}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
-              <div className="modal-action staff_modal_actions">
-                <button type="button" className="btn btn-ghost rounded-full px-6 staff_modal_cancel" onClick={closeModal}>Cancel</button>
-                <button type="submit" className="btn btn-primary rounded-full px-8 staff_modal_save">Save</button>
+              <div className="modal-action mt-8 pt-4 border-t border-[var(--color-base-300)]">
+                <button type="button" className="btn btn-ghost rounded-full px-6" onClick={closeModal}>Cancel</button>
+                <button type="submit" className="btn btn-primary rounded-full px-8">Save</button>
               </div>
             </form>
           </div>
-          <div className="modal-backdrop bg-black/20 staff_modal_backdrop" onClick={closeModal} />
+          <div className="modal-backdrop bg-black/20" onClick={closeModal} />
         </div>
       )}
     </ProtectedRoute>

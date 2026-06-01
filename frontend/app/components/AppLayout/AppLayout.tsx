@@ -8,7 +8,6 @@
  */
 import { Sidebar } from './Sidebar/Sidebar';
 import { usePermissionSync } from '~/lib/usePermissionSync';
-import './AppLayout.css';
 
 interface Props {
   children: React.ReactNode;
@@ -18,9 +17,9 @@ export function AppLayout({ children }: Props) {
   usePermissionSync();
 
   return (
-    <div className="app_layout">
+    <div className="flex h-screen w-full overflow-hidden bg-[var(--color-base-200)]">
       <Sidebar />
-      <div className="app_main">
+      <div className="flex-1 flex flex-col h-screen overflow-y-auto min-w-0">
         {children}
       </div>
     </div>

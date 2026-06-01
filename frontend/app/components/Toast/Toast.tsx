@@ -3,7 +3,6 @@
  * @description Global toast component that listens to uiStore and displays messages.
  */
 import { useUiStore } from '~/store/uiStore';
-import './Toast.css';
 
 export function Toast() {
   const { toast, clearToast } = useUiStore();

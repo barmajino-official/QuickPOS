@@ -21,8 +21,6 @@ import { AppLayout } from '~/components/AppLayout/AppLayout';
 import { TopBar } from '~/components/AppLayout/TopBar/TopBar';
 import type { Product, Category, Customer } from '~/types';
 
-import './PosPage.css';
-
 const LOW_STOCK_THRESHOLD = 5;
 
 interface CartItem {
@@ -153,24 +151,24 @@ export default function PosPage() {
         <TopBar title="Point of Sale" />
 
         {loading ? (
-          <div className="pos_loading">
-            <span className="loading loading-spinner loading-lg text-[var(--color-primary)] pos_spinner" />
+          <div className="flex items-center justify-center flex-1">
+            <span className="loading loading-spinner loading-lg text-[var(--color-primary)]" />
           </div>
         ) : (
-          <div className="pos_layout">
+          <div className="flex flex-col lg:flex-row flex-1 lg:overflow-hidden min-h-0">
 
             {/* ── Products ──────────────────────────────────────── */}
-            <div className="pos_products">
-              <div className="pos_filters">
+            <div className="flex-1 flex flex-col min-w-0 p-4 sm:p-6 lg:overflow-hidden">
+              <div className="flex flex-col sm:flex-row gap-3 mb-4">
                 <input
                   type="text"
                   placeholder="Search by name or barcode…"
-                  className="input input-bordered flex-1 rounded-full bg-[var(--color-base-100)] pos_search"
+                  className="input input-bordered flex-1 rounded-full bg-[var(--color-base-100)] focus:outline-none focus:border-[var(--color-primary)]"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
                 <select
-                  className="select select-bordered rounded-full bg-[var(--color-base-100)] sm:min-w-[180px] pos_category"
+                  className="select select-bordered rounded-full bg-[var(--color-base-100)] sm:min-w-[180px]"
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
                 >
@@ -179,11 +177,11 @@ export default function PosPage() {
                 </select>
               </div>
 
-              <div className="pos_grid_scroll">
+              <div className="flex-1 lg:overflow-y-auto">
                 {filteredProducts.length === 0 ? (
-                  <div className="pos_grid_empty">No products found.</div>
+                  <div className="flex items-center justify-center h-40 text-[var(--color-neutral)]">No products found.</div>
                 ) : (
-                  <div className="pos_grid">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
                     {filteredProducts.map((p) => {
                       const inCart = cart.some((i) => i.productId === p.id);
                       const isOut = p.stock <= 0;
@@ -193,20 +191,20 @@ export default function PosPage() {
                           key={p.id}
                           onClick={() => addToCart(p)}
                           disabled={isOut}
-                          className={`pos_product ${isOut ? 'pos_product_out' : ''} ${inCart ? 'pos_product_active' : ''}`}
+                          className={`bg-[var(--color-base-100)] border text-left p-3 rounded-[20px] cursor-pointer [transition:border-color_0.2s_var(--m3-standard),transform_0.2s_var(--m3-emphasized),box-shadow_0.2s_var(--m3-standard)] enabled:hover:border-[var(--color-primary)] enabled:hover:-translate-y-[2px] enabled:hover:shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_2px_6px_2px_rgba(0,0,0,0.15)] enabled:active:translate-y-0 enabled:active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed ${inCart ? 'border-[var(--color-primary)] shadow-[0_0_0_1px_var(--color-primary)]' : 'border-[var(--color-base-300)]'}`}
                         >
                           {p.imageUrl ? (
-                            <img src={p.imageUrl} alt={p.name} className="pos_product_img" />
+                            <img src={p.imageUrl} alt={p.name} className="w-full aspect-square object-cover rounded-xl mb-2" />
                           ) : (
-                            <div className="pos_product_placeholder">🛍️</div>
+                            <div className="w-full aspect-square bg-[var(--color-base-200)] rounded-xl mb-2 flex items-center justify-center text-3xl">🛍️</div>
                           )}
-                          <div className="pos_product_name">{p.name}</div>
-                          <div className="pos_product_price">{formatCurrency(p.price)}</div>
-                          <div className="pos_product_foot">
-                            <span className={`pos_product_stock ${isLow ? 'pos_product_stock_low' : ''}`}>
+                          <div className="text-sm font-medium leading-tight line-clamp-2 text-[var(--color-base-content)]">{p.name}</div>
+                          <div className="text-[var(--color-primary)] font-bold text-sm mt-1">{formatCurrency(p.price)}</div>
+                          <div className="flex justify-between items-center mt-2">
+                            <span className={`text-xs text-[var(--color-neutral)] ${isLow ? 'text-[var(--color-error)]' : ''}`}>
                               {p.stock} left
                             </span>
-                            {isLow && !isOut && <span className="badge badge-error badge-xs pos_product_low_badge">LOW</span>}
+                            {isLow && !isOut && <span className="badge badge-error badge-xs">LOW</span>}
                           </div>
                         </button>
                       );
@@ -217,51 +215,51 @@ export default function PosPage() {
             </div>
 
             {/* ── Cart ──────────────────────────────────────────── */}
-            <aside className="pos_cart">
-              <div className="pos_cart_head">
-                <h2 className="pos_cart_title">Cart ({cart.length})</h2>
+            <aside className="w-full lg:w-[360px] flex-shrink-0 bg-[var(--color-base-100)] flex flex-col border-t lg:border-t-0 lg:border-l border-[var(--color-base-300)]">
+              <div className="px-5 py-4 border-b border-[var(--color-base-300)]">
+                <h2 className="text-base font-semibold text-[var(--color-base-content)]">Cart ({cart.length})</h2>
               </div>
 
-              <div className="pos_cart_items">
+              <div className="flex-1 overflow-y-auto p-4 space-y-2 lg:min-h-0 max-h-[40vh] lg:max-h-none">
                 {cart.length === 0 ? (
-                  <div className="pos_cart_empty">Add products to get started</div>
+                  <div className="text-center text-[var(--color-neutral)] py-10 text-sm">Add products to get started</div>
                 ) : (
                   cart.map((item) => (
-                    <div key={item.productId} className="pos_cart_item">
-                      <div className="pos_cart_item_top">
-                        <span className="pos_cart_item_name">{item.productName}</span>
-                        <button className="pos_cart_item_remove" onClick={() => removeFromCart(item.productId)}>✕</button>
+                    <div key={item.productId} className="rounded-2xl p-3 bg-[color-mix(in_srgb,var(--color-base-200)_50%,transparent)]">
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="text-sm font-medium leading-tight flex-1 mr-2 text-[var(--color-base-content)]">{item.productName}</span>
+                        <button className="text-[var(--color-error)] text-xs shrink-0" onClick={() => removeFromCart(item.productId)}>✕</button>
                       </div>
-                      <div className="pos_cart_item_bottom">
-                        <div className="pos_qty">
-                          <button className="pos_qty_btn" onClick={() => updateQty(item.productId, -1)}>−</button>
-                          <span className="pos_qty_value">{item.quantity}</span>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <button className="flex items-center justify-center w-7 h-7 rounded-full border border-[var(--color-base-300)] text-[var(--color-base-content)] [transition:background-color_0.15s_var(--m3-standard)] enabled:hover:bg-[var(--color-base-200)] disabled:opacity-40 disabled:cursor-not-allowed" onClick={() => updateQty(item.productId, -1)}>−</button>
+                          <span className="text-sm font-bold w-6 text-center">{item.quantity}</span>
                           <button
-                            className="pos_qty_btn"
+                            className="flex items-center justify-center w-7 h-7 rounded-full border border-[var(--color-base-300)] text-[var(--color-base-content)] [transition:background-color_0.15s_var(--m3-standard)] enabled:hover:bg-[var(--color-base-200)] disabled:opacity-40 disabled:cursor-not-allowed"
                             onClick={() => updateQty(item.productId, 1)}
                             disabled={item.quantity >= item.maxStock}
                           >+</button>
                         </div>
-                        <span className="pos_cart_item_total">{formatCurrency(item.unitPrice * item.quantity)}</span>
+                        <span className="text-sm font-semibold text-[var(--color-primary)]">{formatCurrency(item.unitPrice * item.quantity)}</span>
                       </div>
                     </div>
                   ))
                 )}
               </div>
 
-              <div className="pos_cart_foot">
-                <select className="select select-bordered w-full rounded-2xl text-sm pos_cart_customer" value={selectedCustomerId ?? ''} onChange={handleCustomerChange}>
+              <div className="p-4 border-t border-[var(--color-base-300)] space-y-3">
+                <select className="select select-bordered w-full rounded-2xl text-sm" value={selectedCustomerId ?? ''} onChange={handleCustomerChange}>
                   <option value="">Guest (no account)</option>
                   {customers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
 
-                <div className="pos_cart_total_row">
-                  <span className="pos_cart_total_label">Grand Total</span>
-                  <span className="pos_cart_total_value">{formatCurrency(cartTotal)}</span>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-sm font-medium text-[var(--color-neutral)]">Grand Total</span>
+                  <span className="text-2xl font-bold text-[var(--color-primary)]">{formatCurrency(cartTotal)}</span>
                 </div>
 
                 <button
-                  className="btn btn-primary w-full rounded-full text-base font-semibold shadow-sm pos_checkout"
+                  className="btn btn-primary w-full rounded-full text-base font-semibold shadow-sm"
                   onClick={handleCheckout}
                   disabled={cart.length === 0 || processing}
                 >
