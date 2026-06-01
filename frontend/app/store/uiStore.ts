@@ -27,7 +27,7 @@ interface UiState {
 
 export const useUiStore = create<UiState>()((set) => ({
   toast: null,
-  showToast: (message:string, type = 'info') => {
+  showToast: (message: string, type = 'info') => {
     set({ toast: { message, type } });
     setTimeout(() => {
       set((state) => (state.toast?.message === message ? { toast: null } : state));

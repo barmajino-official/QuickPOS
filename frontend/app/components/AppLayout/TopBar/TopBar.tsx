@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react';
 
 import { useUiStore } from '~/store/uiStore';
 
-
 interface Props {
   title: string;
   actions?: React.ReactNode;
@@ -28,7 +27,7 @@ export function TopBar({ title, actions }: Props) {
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), CLOCK_TICK_MS);
-    
+
     const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('pos_theme') || 'montajat';
     setIsDark(currentTheme === 'montajat-dark');
 

@@ -5,23 +5,13 @@
  *              Retrieves data exclusively from the global sessionStore.
  */
 
-// 1. React core
-import React from 'react';
-
-// 2. Third-party libraries
-
-// 3. Internal — API
-
-// 4. Internal — Store
+// Internal — Store
 import { useSessionStore } from '~/store/sessionStore';
 
-// 5. Internal — Components
+// Internal — Components
 import { ProtectedRoute } from '~/components/ProtectedRoute/ProtectedRoute';
 import { AppLayout } from '~/components/AppLayout/AppLayout';
 import { TopBar } from '~/components/AppLayout/TopBar/TopBar';
-
-// 6. Internal — Types
-import type { StaffProfile } from '~/types';
 
 // --- Constants ---
 const DEFAULT_AVATAR_CHAR = '?';
@@ -44,7 +34,6 @@ export default function ProfilePage() {
         <TopBar title="My Profile" />
         <div className="p-4 sm:p-6 lg:p-8 w-full" style={{ animation: 'fadeUp 0.5s var(--m3-emphasized) both' }}>
           <div className="bg-[var(--color-base-100)] rounded-[24px] shadow-sm border border-[var(--color-base-300)]">
-            
             {/* Header Section */}
             <div className="p-8 border-b border-[var(--color-base-300)] flex items-center gap-6">
               <div className="flex items-center justify-center">
@@ -60,13 +49,12 @@ export default function ProfilePage() {
 
             {/* Body Section */}
             <div className="p-8 space-y-8">
-              
               <div className="flex flex-col gap-4">
                 <h3 className="text-lg font-bold text-[var(--color-base-content)]">Contact Information</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   <div className="flex flex-col gap-1">
                     <span className="text-xs font-bold text-[var(--color-neutral)] uppercase tracking-wide">Email Address</span>
-                    <span 
+                    <span
                       className="text-base text-[var(--color-base-content)] font-medium cursor-pointer hover:text-primary transition-colors"
                       onClick={handleCopyEmail}
                       title="Click to copy"

@@ -34,7 +34,6 @@ export interface Brand {
   createdAt: string;
 }
 
-
 export interface BrandProductRow {
   id: number;
   name: string;

@@ -1,0 +1,33 @@
+# ── Dependencies ────────────────────────────────────────────────
+node_modules/
+**/node_modules/
+
+# ── .NET build output ───────────────────────────────────────────
+backend/bin/
+backend/obj/
+
+# ── Frontend build / generated ──────────────────────────────────
+frontend/build/
+frontend/.react-router/
+
+# ── Database (Postgres data dir — Docker/postgres owned) ────────
+database/
+
+# ── Uploaded files (runtime data) — keep the folder, not contents
+uploads/*
+!uploads/.gitkeep
+
+# ── Environment & secrets ───────────────────────────────────────
+.env
+.env.*
+*.local
+
+# ── Backups / dumps ─────────────────────────────────────────────
+backup.sql
+*.dump
+
+# ── OS / editor cruft ───────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+.idea/

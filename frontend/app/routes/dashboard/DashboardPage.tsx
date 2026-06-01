@@ -28,7 +28,6 @@ import { SalesTrendChart } from '~/components/SalesTrendChart/SalesTrendChart';
 // 6. Internal — Types
 import type { DashboardStats } from '~/types';
 
-// 7. Styles (always last)
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -38,7 +37,9 @@ export default function DashboardPage() {
   useEffect(() => {
     dashboardApi.stats()
       .then(res => setStats(res as DashboardStats))
-      .catch(err => showToast(err.message || 'Failed to load dashboard', 'error'))
+      .catch((err: unknown) =>
+        showToast(err instanceof Error ? err.message : 'Failed to load dashboard', 'error'),
+      )
       .finally(() => setLoading(false));
   }, [showToast]);
 
@@ -53,7 +54,6 @@ export default function DashboardPage() {
             </div>
           ) : stats ? (
             <div className="space-y-6">
-
               {/* ── Top Stats ── */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-[var(--color-base-100)] rounded-[24px] shadow-sm p-6 flex flex-col justify-between hover:-translate-y-[2px] hover:shadow-[0px_1px_3px_0px_rgba(0,0,0,0.3),0px_4px_8px_3px_rgba(0,0,0,0.15)]" style={{ transition: 'background-color 0.25s var(--m3-standard), transform 0.35s var(--m3-emphasized), box-shadow 0.25s var(--m3-standard)' }}>
@@ -92,7 +92,6 @@ export default function DashboardPage() {
 
               {/* ── Alerts ── */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
                 {/* Low Stock */}
                 <div className="rounded-[24px] overflow-hidden">
                   <div className="px-6 py-5 flex justify-between items-center">
@@ -160,7 +159,6 @@ export default function DashboardPage() {
 
               {/* ── Leaderboards ── */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-10">
-
                 {/* Top Products */}
                 <div className="bg-[var(--color-base-200)] rounded-[24px] overflow-hidden">
                   <div className="px-6 py-5 flex justify-between items-center">
@@ -222,7 +220,6 @@ export default function DashboardPage() {
                   </div>
                 </div>
               </div>
-
             </div>
           ) : (
             <div className="text-center text-error py-10">Failed to load dashboard data.</div>
@@ -232,7 +229,6 @@ export default function DashboardPage() {
     </ProtectedRoute>
   );
 }
-
 
 // --- Helper Functions ---
 

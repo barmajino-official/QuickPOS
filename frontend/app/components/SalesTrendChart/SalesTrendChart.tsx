@@ -6,7 +6,7 @@
  * @receives data – array of { date, revenue, orderCount }, oldest → newest
  *
  * @notes Presentational only. Colors use CSS custom properties so the chart adapts to
- *        the light/dark M3 theme. CSS lives in ./SalesTrendChart.css.
+ *        the light/dark M3 theme.
  */
 import {
   ResponsiveContainer,
@@ -20,7 +20,6 @@ import {
 } from 'recharts';
 
 import type { DailySales } from '~/types';
-
 
 interface Props {
   data: DailySales[];

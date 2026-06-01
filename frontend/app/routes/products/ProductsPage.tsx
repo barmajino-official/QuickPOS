@@ -2,7 +2,7 @@
  * @file ProductsPage.tsx
  * @description Products CRUD page with full-width table, modal form for
  *              creating/editing products, and stock-level indicators.
- *              Follows barmajino-react-guidelines with co-located CSS.
+ *              Styling is inline Tailwind utilities (no co-located CSS file).
  */
 
 // 1. React core
@@ -28,12 +28,26 @@ import { TopBar } from '~/components/AppLayout/TopBar/TopBar';
 // 6. Internal — Types
 import type { Product, Category, Brand } from '~/types';
 
-// 7. Styles (always last)
+// --- Local types ---
+type SortKey = 'name' | 'barcode' | 'price' | 'stock' | 'category' | 'brand' | 'expiryDate';
+type SortDirection = 'asc' | 'desc';
+type SortConfig = { key: SortKey; direction: SortDirection };
+type ViewMode = 'all' | 'category' | 'brand';
+
+interface ProductGroup {
+  id: string;
+  name: string;
+  products: Product[];
+  brand?: Brand;
+  category?: Category;
+}
 
 // --- Constants ---
 const LOW_STOCK_THRESHOLD = 5;
 const CURRENCY_LOCALE = 'en-US';
 const CURRENCY_CODE = 'USD';
+const UNCATEGORIZED_ID = 'uncategorized';
+const NO_BRAND_ID = 'no-brand';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -44,8 +58,8 @@ export default function ProductsPage() {
   const { showToast } = useUiStore();
 
   // Sorting and grouping state
-  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
-  const [viewMode, setViewMode] = useState<'all' | 'category' | 'brand'>('all');
+  const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>('all');
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,8 +93,8 @@ export default function ProductsPage() {
       setProducts(prodRes as Product[]);
       setCategories(catRes as Category[]);
       setBrands(brandRes as Brand[]);
-    } catch (err: any) {
-      showToast(err.message || 'Failed to load products', 'error');
+    } catch (err: unknown) {
+      showToast(err instanceof Error ? err.message : 'Failed to load products', 'error');
     } finally {
       setLoading(false);
     }
@@ -171,8 +185,8 @@ export default function ProductsPage() {
       showToast(editingId ? 'Product updated successfully' : 'Product added successfully', 'success');
       handleCloseModal();
       loadData();
-    } catch (err: any) {
-      showToast(err.message || 'Failed to save product', 'error');
+    } catch (err: unknown) {
+      showToast(err instanceof Error ? err.message : 'Failed to save product', 'error');
     }
   };
 
@@ -182,8 +196,8 @@ export default function ProductsPage() {
       await productsApi.remove(id);
       showToast('Product deleted', 'success');
       loadData();
-    } catch (err: any) {
-      showToast(err.message || 'Failed to delete product', 'error');
+    } catch (err: unknown) {
+      showToast(err instanceof Error ? err.message : 'Failed to delete product', 'error');
     }
   };
 
@@ -210,88 +224,99 @@ export default function ProductsPage() {
       )
     : products;
 
-  // --- Sorting & Grouping ---
-  const handleSort = (key: string) => {
-    let direction: 'asc' | 'desc' = 'asc';
-    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
+  // --- Sorting ---
+  // Toggle asc/desc on the same key; otherwise start ascending on a new key.
+  const handleSort = (key: SortKey) => {
+    setSortConfig((prev) => {
+      if (prev && prev.key === key && prev.direction === 'asc') {
+        return { key, direction: 'desc' };
+      }
+      return { key, direction: 'asc' };
+    });
+  };
+
+  // Pull the comparable value for a given sort key (always a string for name/
+  // barcode/category/brand/expiry, a number for price/stock).
+  const sortValue = (p: Product, key: SortKey): string | number => {
+    switch (key) {
+      case 'price':
+        return p.price;
+      case 'stock':
+        return p.stock;
+      case 'category':
+        return p.category?.name ?? '';
+      case 'brand':
+        return p.brand?.name ?? '';
+      case 'barcode':
+        return p.barcode ?? '';
+      case 'expiryDate':
+        return p.expiryDate ?? '';
+      case 'name':
+        return p.name;
     }
-    setSortConfig({ key, direction });
   };
 
-  const sortedProducts = (() => {
-    if (!sortConfig) return filteredProducts;
-    return [...filteredProducts].sort((a, b) => {
-      let aVal: any = (a as any)[sortConfig.key];
-      let bVal: any = (b as any)[sortConfig.key];
+  const sortedProducts = sortConfig
+    ? [...filteredProducts].sort((a, b) => {
+        const aVal = sortValue(a, sortConfig.key);
+        const bVal = sortValue(b, sortConfig.key);
+        const order = sortConfig.direction === 'asc' ? 1 : -1;
 
-      if (sortConfig.key === 'category') {
-        aVal = a.category?.name || '';
-        bVal = b.category?.name || '';
-      } else if (sortConfig.key === 'brand') {
-        aVal = a.brand?.name || '';
-        bVal = b.brand?.name || '';
-      }
+        if (typeof aVal === 'number' && typeof bVal === 'number') {
+          return (aVal - bVal) * order;
+        }
+        return String(aVal).localeCompare(String(bVal)) * order;
+      })
+    : filteredProducts;
 
-      if (aVal === null || aVal === undefined) aVal = '';
-      if (bVal === null || bVal === undefined) bVal = '';
+  // --- Grouping ---
+  // none → a single implicit group; category/brand → one group per key, with the
+  // unlabeled products collected under "Uncategorized" / "No brand".
+  const groupedProducts: ProductGroup[] = (() => {
+    if (viewMode === 'all') {
+      return [{ id: 'all', name: 'All Products', products: sortedProducts }];
+    }
 
-      if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
-      if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
-      return 0;
-    });
-  })();
+    const groups = new Map<string, ProductGroup>();
 
-  type GroupData = {
-    id: string;
-    name: string;
-    count: number;
-    products: Product[];
-    brand?: Brand;
-    category?: Category;
-  };
+    for (const product of sortedProducts) {
+      let key: string;
+      let group: ProductGroup;
 
-  const groupedProducts: GroupData[] = (() => {
-    if (viewMode === 'all') return [{ id: 'all', name: 'All Products', count: sortedProducts.length, products: sortedProducts }];
-    
-    const groupsMap = new Map<string, GroupData>();
-    
-    sortedProducts.forEach(p => {
-      let key = 'uncategorized';
-      let name = 'Uncategorized';
-      let brand: Brand | undefined;
-      let category: Category | undefined;
-      
       if (viewMode === 'category') {
-        if (p.category) {
-          key = `cat-${p.category.id}`;
-          name = p.category.name;
-          category = p.category;
-        }
-      } else if (viewMode === 'brand') {
-        if (p.brand) {
-          key = `brand-${p.brand.id}`;
-          name = p.brand.name;
-          brand = p.brand;
-        } else {
-          name = 'No Brand';
-        }
+        key = product.category ? `cat-${product.category.id}` : UNCATEGORIZED_ID;
+        group = groups.get(key) ?? {
+          id: key,
+          name: product.category?.name ?? 'Uncategorized',
+          products: [],
+          category: product.category ?? undefined,
+        };
+      } else {
+        key = product.brand ? `brand-${product.brand.id}` : NO_BRAND_ID;
+        group = groups.get(key) ?? {
+          id: key,
+          name: product.brand?.name ?? 'No brand',
+          products: [],
+          brand: product.brand ?? undefined,
+        };
       }
-      
-      if (!groupsMap.has(key)) {
-        groupsMap.set(key, { id: key, name, count: 0, products: [], brand, category });
-      }
-      const group = groupsMap.get(key)!;
-      group.products.push(p);
-      group.count++;
-    });
-    
-    return Array.from(groupsMap.values()).sort((a, b) => {
-      if (a.id === 'uncategorized') return 1;
-      if (b.id === 'uncategorized') return -1;
+
+      group.products.push(product);
+      groups.set(key, group);
+    }
+
+    // Keep the catch-all bucket last; everything else is alphabetical.
+    return Array.from(groups.values()).sort((a, b) => {
+      const aIsFallback = a.id === UNCATEGORIZED_ID || a.id === NO_BRAND_ID;
+      const bIsFallback = b.id === UNCATEGORIZED_ID || b.id === NO_BRAND_ID;
+      if (aIsFallback) return 1;
+      if (bIsFallback) return -1;
       return a.name.localeCompare(b.name);
     });
   })();
+
+  const sortIndicator = (key: SortKey) =>
+    sortConfig?.key === key ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : '';
 
   const renderTable = (prods: Product[]) => (
     <div className="overflow-x-auto">
@@ -299,26 +324,47 @@ export default function ProductsPage() {
         <thead className="bg-[var(--color-base-200)]/50 text-[var(--color-neutral)]">
           <tr>
             <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs">Image</th>
-            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('name')}>
-              Name {sortConfig?.key === 'name' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+            <th
+              className="cursor-pointer select-none px-6 py-4 font-medium tracking-wide uppercase text-xs hover:text-[var(--color-primary)]"
+              onClick={() => handleSort('name')}
+            >
+              Name{sortIndicator('name')}
             </th>
-            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('barcode')}>
-              Barcode {sortConfig?.key === 'barcode' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+            <th
+              className="cursor-pointer select-none px-6 py-4 font-medium tracking-wide uppercase text-xs hover:text-[var(--color-primary)]"
+              onClick={() => handleSort('barcode')}
+            >
+              Barcode{sortIndicator('barcode')}
             </th>
-            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs text-right cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('price')}>
-              Price {sortConfig?.key === 'price' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+            <th
+              className="cursor-pointer select-none px-6 py-4 font-medium tracking-wide uppercase text-xs text-right hover:text-[var(--color-primary)]"
+              onClick={() => handleSort('price')}
+            >
+              Price{sortIndicator('price')}
             </th>
-            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs text-right cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('stock')}>
-              Stock {sortConfig?.key === 'stock' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+            <th
+              className="cursor-pointer select-none px-6 py-4 font-medium tracking-wide uppercase text-xs text-right hover:text-[var(--color-primary)]"
+              onClick={() => handleSort('stock')}
+            >
+              Stock{sortIndicator('stock')}
             </th>
-            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('category')}>
-              Category {sortConfig?.key === 'category' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+            <th
+              className="cursor-pointer select-none px-6 py-4 font-medium tracking-wide uppercase text-xs hover:text-[var(--color-primary)]"
+              onClick={() => handleSort('category')}
+            >
+              Category{sortIndicator('category')}
             </th>
-            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('brand')}>
-              Brand {sortConfig?.key === 'brand' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+            <th
+              className="cursor-pointer select-none px-6 py-4 font-medium tracking-wide uppercase text-xs hover:text-[var(--color-primary)]"
+              onClick={() => handleSort('brand')}
+            >
+              Brand{sortIndicator('brand')}
             </th>
-            <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs cursor-pointer hover:text-[var(--color-primary)]" onClick={() => handleSort('expiryDate')}>
-              Expiry {sortConfig?.key === 'expiryDate' ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
+            <th
+              className="cursor-pointer select-none px-6 py-4 font-medium tracking-wide uppercase text-xs hover:text-[var(--color-primary)]"
+              onClick={() => handleSort('expiryDate')}
+            >
+              Expiry{sortIndicator('expiryDate')}
             </th>
             <th className="px-6 py-4 font-medium tracking-wide uppercase text-xs text-right">Actions</th>
           </tr>
@@ -414,11 +460,11 @@ export default function ProductsPage() {
             <select
               className="select select-bordered rounded-full bg-[var(--color-base-100)]"
               value={viewMode}
-              onChange={(e) => setViewMode(e.target.value as any)}
+              onChange={(e) => setViewMode(e.target.value as ViewMode)}
             >
-              <option value="all">View All Products</option>
-              <option value="category">Group by Category</option>
-              <option value="brand">Group by Brand</option>
+              <option value="all">Group by: None</option>
+              <option value="category">Group by: Category</option>
+              <option value="brand">Group by: Brand</option>
             </select>
           </div>
 
@@ -443,43 +489,49 @@ export default function ProductsPage() {
           ) : (
             <div className="flex flex-col gap-6">
               {groupedProducts.map((group) => (
-                <div key={group.id} className="bg-[var(--color-base-100)] rounded-[24px] shadow-sm overflow-hidden w-full">
+                <div
+                  key={group.id}
+                  className="bg-[var(--color-base-100)] rounded-[24px] shadow-sm overflow-hidden w-full"
+                >
                   <div className="p-0 overflow-x-auto">
                     {viewMode !== 'all' && (
-                      <div className="flex items-center justify-between mb-4 px-4 py-3 bg-[var(--color-base-200)] m-2 rounded-2xl">
+                      <div className="flex items-center justify-between m-2 px-4 py-3 rounded-2xl bg-[var(--color-base-200)]">
                         <div className="flex items-center gap-4">
-                          {viewMode === 'brand' && group.brand?.imageUrl && (
-                            <div className="w-10 h-10 rounded-full overflow-hidden bg-white shadow-sm flex items-center justify-center">
-                              <img src={toImageSrc(group.brand.imageUrl)} alt={group.name} className="w-full h-full object-cover" />
-                            </div>
-                          )}
-                          {viewMode === 'brand' && !group.brand?.imageUrl && (
-                            <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] bg-opacity-10 flex items-center justify-center text-[var(--color-primary)]">
-                              🏢
-                            </div>
-                          )}
-                          {viewMode === 'category' && (
-                            <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] bg-opacity-10 flex items-center justify-center text-[var(--color-primary)]">
-                              📁
-                            </div>
-                          )}
-                          <h2 className="text-xl font-bold text-[var(--color-base-content)] m-0">
-                            {group.name} <span className="text-sm font-normal opacity-60 ml-2">({group.count})</span>
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[color-mix(in_srgb,var(--color-primary)_12%,transparent)] text-[var(--color-primary)]">
+                            {viewMode === 'brand' && group.brand?.imageUrl ? (
+                              <img
+                                src={toImageSrc(group.brand.imageUrl)}
+                                alt={group.name}
+                                className="w-full h-full rounded-full object-cover"
+                              />
+                            ) : viewMode === 'brand' ? (
+                              '🏢'
+                            ) : (
+                              '📁'
+                            )}
+                          </div>
+                          <h2 className="text-xl font-bold m-0 text-[var(--color-base-content)]">
+                            {group.name}
+                            <span className="text-sm font-normal opacity-60 ml-2">({group.products.length})</span>
                           </h2>
                         </div>
-                        
-                        <div className="flex items-center gap-2">
-                          {viewMode === 'brand' && group.brand && (
-                            <Link to={`/brands/${group.brand.id}`} className="btn btn-sm btn-outline rounded-full text-[var(--color-primary)] border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white hover:border-[var(--color-primary)]">
-                              View Brand
-                            </Link>
-                          )}
-                          {viewMode === 'category' && group.category && (
-                            <Link to={`/categories/${group.category.id}`} className="btn btn-sm btn-outline rounded-full text-[var(--color-primary)] border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white hover:border-[var(--color-primary)]">
-                              View Category
-                            </Link>
-                          )}
-                        </div>
+
+                        {viewMode === 'brand' && group.brand && (
+                          <Link
+                            to={`/brands/${group.brand.id}`}
+                            className="btn btn-sm btn-outline rounded-full"
+                          >
+                            View Brand
+                          </Link>
+                        )}
+                        {viewMode === 'category' && group.category && (
+                          <Link
+                            to={`/categories/${group.category.id}`}
+                            className="btn btn-sm btn-outline rounded-full"
+                          >
+                            View Category
+                          </Link>
+                        )}
                       </div>
                     )}
                     {renderTable(group.products)}

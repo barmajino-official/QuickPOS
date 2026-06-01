@@ -73,7 +73,6 @@ export default function BrandDetailPage() {
                 </div>
               </div>
 
-
               {/* ── KPI cards ───────────────────────────────────── */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 <div className="bg-[var(--color-base-100)] rounded-[24px] border border-[var(--color-base-300)] p-6 flex flex-col gap-2">

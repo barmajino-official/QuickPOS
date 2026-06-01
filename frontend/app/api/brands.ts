@@ -16,9 +16,8 @@ export const brandsApi = {
   update:    (id: number, b: unknown)=> api.put(`/api/brands/${id}`, b),
   remove:    (id: number)            => api.del(`/api/brands/${id}`),
   uploadImage: (id: number, file: File) => {
-      const fd = new FormData();
-      fd.append('file', file);
-      return api.upload(`/api/brands/${id}/image`, fd);
-    },};
-
-
+    const fd = new FormData();
+    fd.append('file', file);
+    return api.upload(`/api/brands/${id}/image`, fd);
+  },
+};

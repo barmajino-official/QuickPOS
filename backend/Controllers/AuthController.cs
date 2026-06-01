@@ -57,7 +57,8 @@ public class AuthController : ControllerBase
         var adminPermissions = new Dictionary<string, bool>
         {
             ["dashboard"] = true, ["pos"] = true, ["orders"] = true,
-            ["products"] = true, ["categories"] = true, ["customers"] = true, ["staff"] = true
+            ["products"] = true, ["brands"] = true, ["categories"] = true,
+            ["customers"] = true, ["staff"] = true
         };
 
         var now = DateTime.UtcNow;

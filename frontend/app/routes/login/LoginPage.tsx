@@ -4,8 +4,7 @@
  *              If a session already exists, redirects to the user's highest-priority
  *              permitted page. Also serves the index route ("/").
  *
- * @notes  CSS lives in ./LoginPage.css — edit styles there, not inline.
- *         Uses sessionStore for auth and uiStore for toast feedback.
+ * @notes  Uses sessionStore for auth and uiStore for toast feedback.
  *         Landing route is resolved by getLandingPath so cashiers (pos-only) are
  *         not bounced to a dashboard they cannot see.
  */
@@ -29,8 +28,7 @@ import { getLandingPath } from '~/lib/permissions';
 // 6. Internal — Types
 import type { Route } from './+types/LoginPage';
 
-export const links: Route.LinksFunction = () => [
-];
+export const links: Route.LinksFunction = () => [];
 
 export default function LoginPage() {
   const [isRegister, setIsRegister] = useState(false);

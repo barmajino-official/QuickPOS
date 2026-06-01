@@ -20,7 +20,7 @@ import type { Brand } from '~/types';
 export default function BrandsPage() {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
-  const showToast = useUiStore((s:unknown) => s.showToast);
+  const showToast = useUiStore((s) => s.showToast);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -34,8 +34,6 @@ export default function BrandsPage() {
     try {
       setLoading(true);
       setBrands((await brandsApi.list()) as Brand[]);
-      // print the data to the console for debugging
-      console.log('Loaded brands:', brands);
     } catch (err: unknown) {
       showToast(err instanceof Error ? err.message : 'Failed to load brands', 'error');
     } finally {
@@ -43,9 +41,9 @@ export default function BrandsPage() {
     }
   };
 
-  useEffect(() => { loadData();
-    console.log('Brands state after loadData call:', brands); // Debug log to check state update
-   }, []);
+  useEffect(() => {
+    loadData();
+  }, []);
 
   const openModal = (b?: Brand) => {
     setImageFile(null);
@@ -133,7 +131,7 @@ export default function BrandsPage() {
         <TopBar
           title="Brands"
           actions={
-            <button className="btn btn-primary btn-sm rounded-full brands_new_btn" onClick={() => openModal()}>
+            <button className="btn btn-primary btn-sm rounded-full px-6 font-medium shadow-sm" onClick={() => openModal()}>
               + New Brand
             </button>
           }

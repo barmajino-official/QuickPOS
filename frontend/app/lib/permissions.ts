@@ -23,6 +23,7 @@ const ROUTE_PRIORITY: RouteRule[] = [
   { path: '/pos', permission: 'pos' },
   { path: '/orders', permission: 'orders' },
   { path: '/products', permission: 'products' },
+  { path: '/brands', permission: 'brands' },
   { path: '/categories', permission: 'categories' },
   { path: '/customers', permission: 'customers' },
   { path: '/staff', permission: 'staff' },

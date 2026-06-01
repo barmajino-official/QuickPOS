@@ -3,7 +3,7 @@
  * @description CRM table for managing customer profiles. Full-width, responsive,
  *              with debounced search by name / email / phone and a create-edit modal.
  *
- * @notes Requires "customers" permission. CSS lives in ./CustomersPage.css.
+ * @notes Requires "customers" permission. Uses ProtectedRoute guard.
  */
 import { useEffect, useState } from 'react';
 
@@ -112,13 +112,13 @@ export default function CustomersPage() {
 
         <div className="p-4 sm:p-6 lg:p-8 w-full" style={{ animation: 'fadeUp 0.5s var(--m3-emphasized) both' }}>
           <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Search by name, email, or phone…"
-                className="input input-bordered w-full max-w-md rounded-full bg-[var(--color-base-100)] focus:outline-none focus:border-[var(--color-primary)]"
-                value={search}
-                onChange={handleSearchChange}
-              />
+            <input
+              type="text"
+              placeholder="Search by name, email, or phone…"
+              className="input input-bordered w-full max-w-md rounded-full bg-[var(--color-base-100)] focus:outline-none focus:border-[var(--color-primary)]"
+              value={search}
+              onChange={handleSearchChange}
+            />
           </div>
 
           {loading ? (

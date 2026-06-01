@@ -1,3 +1,10 @@
+/**
+ * @file root.tsx
+ * @description Root route module for the SPA. Defines the document shell (<html>/<head>/
+ *              <body>), global <links> (fonts + app stylesheet), the persisted theme
+ *              bootstrap script, the mounted global <Toast>, and the top-level
+ *              ErrorBoundary. Every route renders inside this layout.
+ */
 import {
   isRouteErrorResponse,
   Links,

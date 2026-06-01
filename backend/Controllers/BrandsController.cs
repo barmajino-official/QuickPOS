@@ -16,19 +16,18 @@ public class BrandsController : ControllerBase
 {
     private readonly AppDbContext _db;
     private readonly ImageService _images;
+
     public BrandsController(AppDbContext db, ImageService images)
     {
-      _db = db;
-      _images = images;
-    } 
+        _db = db;
+        _images = images;
+    }
 
     [Permission("brands", "products", "pos")]
     [HttpGet]
     public async Task<IActionResult> GetAll() =>
         Ok(await _db.Brands.OrderBy(b => b.Name).ToListAsync());
 
-
-//  get custom brand by id
     [Permission("brands", "products", "pos")]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
@@ -37,8 +36,6 @@ public class BrandsController : ControllerBase
         return brand == null ? NotFound() : Ok(brand);
     }
 
-
-//  create new brand
     [Permission("brands")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] BrandRequest req)
@@ -57,7 +54,6 @@ public class BrandsController : ControllerBase
         return Ok(brand);
     }
 
-//  update brand by id
     [Permission("brands")]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] BrandRequest req)
@@ -73,19 +69,18 @@ public class BrandsController : ControllerBase
         return Ok(brand);
     }
 
-//  delete brand by id
     [Permission("brands")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
         var brand = await _db.Brands.FindAsync(id);
         if (brand == null) return NotFound();
+        _images.Delete(brand.ImageUrl);
         _db.Brands.Remove(brand);
         await _db.SaveChangesAsync();
         return NoContent();
     }
 
-//  get analytics for a brand by id
     [Permission("brands", "products", "pos")]
     [HttpGet("{id:int}/analytics")]
     public async Task<IActionResult> Analytics(int id)
@@ -130,7 +125,7 @@ public class BrandsController : ControllerBase
 
     [Permission("brands")]
     [HttpPost("{id:int}/image")]
-    [RequestSizeLimit(10_485_760)] // 10MB
+    [RequestSizeLimit(10_485_760)]
     public async Task<IActionResult> UploadImage(int id, IFormFile file)
     {
         var brand = await _db.Brands.FindAsync(id);
@@ -139,7 +134,5 @@ public class BrandsController : ControllerBase
         brand.ImageUrl = await _images.SaveAsync(file);
         await _db.SaveChangesAsync();
         return Ok(new { imageUrl = brand.ImageUrl });
-        
     }
 }
-

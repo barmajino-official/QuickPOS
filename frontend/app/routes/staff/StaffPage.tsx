@@ -17,11 +17,11 @@ import { AppLayout } from '~/components/AppLayout/AppLayout';
 import { TopBar } from '~/components/AppLayout/TopBar/TopBar';
 import type { Staff } from '~/types';
 
-const ALL_PERMISSIONS = ['dashboard', 'pos', 'orders', 'products', 'categories', 'customers', 'staff'] as const;
+const ALL_PERMISSIONS = ['dashboard', 'pos', 'orders', 'products', 'brands', 'categories', 'customers', 'staff'] as const;
 
 const DEFAULT_PERMISSIONS: Record<string, boolean> = {
   dashboard: false, pos: true, orders: false,
-  products: false, categories: false, customers: false, staff: false,
+  products: false, brands: false, categories: false, customers: false, staff: false,
 };
 
 const roleClass = (role: string) => {

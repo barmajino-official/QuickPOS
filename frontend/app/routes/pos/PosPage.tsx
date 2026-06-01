@@ -6,7 +6,7 @@
  *
  * @notes Requires "pos" permission. Checkout posts an order + items and decrements
  *        stock in one backend transaction. Stock is validated locally before adding
- *        to the cart and before incrementing. CSS lives in ./PosPage.css.
+ *        to the cart and before incrementing.
  */
 import { useEffect, useState } from 'react';
 
